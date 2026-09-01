@@ -5,8 +5,11 @@ inspired by Texas Instruments' Google Speech Commands example for the
 MSPM0G5187. The project uses real Speech Commands v0.02 audio, a documented
 `49 x 10` MFCC front end, and reproducible speaker-disjoint evaluation.
 
-**Student:** Lucas(Wenqi) Wang (SID 550552222)  
+**Student:** Lucas(Wenqi) Wang (SID 550552222)
+
 **Project site:** https://wenqiwang1314-dotcom.github.io/elec5305-project-550552222/
+
+**Final proposal PDF:** [ELEC5305 Project Proposal](output/pdf/ELEC5305_Project_Proposal_Lucas_Wenqi_Wang_550552222.pdf)
 
 ## Current status
 

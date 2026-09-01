@@ -2,10 +2,11 @@
 
 ## Student Information
 
-- Full name: `[TO BE CONFIRMED]`
-- Student ID: `[TO BE CONFIRMED]`
+- Full name: `Lucas(Wenqi) Wang`
+- Student ID: `550552222`
 - GitHub username: `wenqiwang1314-dotcom`
-- GitHub project and Pages links: added after the repository name is confirmed
+- GitHub repository: `https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222`
+- GitHub Project Site: `https://wenqiwang1314-dotcom.github.io/elec5305-project-550552222/`
 
 ## Project Overview
 

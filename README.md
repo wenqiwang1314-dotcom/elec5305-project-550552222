@@ -5,6 +5,9 @@ inspired by Texas Instruments' Google Speech Commands example for the
 MSPM0G5187. The project uses real Speech Commands v0.02 audio, a documented
 `49 x 10` MFCC front end, and reproducible speaker-disjoint evaluation.
 
+**Student:** Lucas(Wenqi) Wang (SID 550552222)  
+**Project site:** https://wenqiwang1314-dotcom.github.io/elec5305-project-550552222/
+
 ## Current status
 
 - Real dataset found and audited: 105,829 one-second 16 kHz WAV files.

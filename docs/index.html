@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Resource-Aware Keyword Spotting | ELEC5305</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <div class="tag">ELEC5305 Project Proposal</div><div class="tag">MATLAB</div><div class="tag">Speech Commands v0.02</div>
+  <h1>Resource-Aware Keyword Spotting</h1>
+  <p>A reproducible 12-class speech-command pipeline built from first principles: audio framing, Mel filterbanks, MFCCs, transparent baselines, and a path toward a compact DSCNN.</p>
+</header>
+<main>
+  <section>
+    <h2>Research question</h2>
+    <p>How accurately can a compact, resource-aware model distinguish ten voice commands, unknown speech, and silence when evaluated with speaker-disjoint data?</p>
+    <div class="grid">
+      <div class="card"><div class="metric">16 kHz</div>one-second real speech clips</div>
+      <div class="card"><div class="metric">49 x 10</div>TI-shaped MFCC input</div>
+      <div class="card"><div class="metric">12</div>known, unknown, and silence classes</div>
+      <div class="card"><div class="metric" id="accuracy">39.17%</div>real-data smoke-test accuracy</div>
+    </div>
+  </section>
+  <section>
+    <h2>Method</h2>
+    <p>Speech Commands v0.02 is partitioned using its official validation and testing lists. Each waveform is converted into 30 ms frames at a 20 ms step. Forty Mel-band energies are compressed into ten MFCCs, producing 49 time frames per utterance. A manual 5-nearest-neighbour model establishes the first auditable baseline; a depthwise-separable CNN is the planned next model.</p>
+    <p class="notice"><strong>Evidence boundary:</strong> the current result uses 720 training and 240 held-out test samples. It is a small MATLAB baseline, not a DSCNN, quantised model, NPU compilation, or hardware energy result.</p>
+  </section>
+  <section>
+    <h2>Preliminary analysis</h2>
+    <figure><img src="assets/real_audio_frontend.png" alt="Waveform, STFT and MFCC analysis of a real test utterance"><figcaption>A held-out real utterance represented as waveform, short-time spectrum, and the 49 x 10 MFCC tensor.</figcaption></figure>
+    <figure><img src="assets/confusion_matrix.png" alt="Confusion matrix for the real-data smoke test"><figcaption>The confusion matrix exposes command pairs that require stronger temporal modelling.</figcaption></figure>
+    <p>The baseline reached 39.17% accuracy and macro recall, above the 8.33% chance level, with zero audited speaker overlap. Silence recall was 100%, while unknown-word recall was 0%. This failure identifies the main next problem: learn a stronger temporal representation and an explicit rejection boundary for out-of-vocabulary speech.</p>
+  </section>
+  <section>
+    <h2>Evaluation and deliverables</h2>
+    <div class="grid">
+      <div class="card"><strong>Integrity</strong><br>Exact manifests and speaker-overlap audit.</div>
+      <div class="card"><strong>Recognition</strong><br>Accuracy, macro recall, per-class precision/recall.</div>
+      <div class="card"><strong>Efficiency</strong><br>Runtime, parameters, memory, and later MCU feasibility.</div>
+    </div>
+  </section>
+  <section>
+    <h2>Timeline</h2>
+    <table><thead><tr><th>Weeks</th><th>Milestone</th></tr></thead><tbody>
+      <tr><td>1-2</td><td>Scope, dataset audit, literature review</td></tr>
+      <tr><td>3-5</td><td>MFCC front end and reproducible baseline</td></tr>
+      <tr><td>6-9</td><td>DSCNN implementation and validation</td></tr>
+      <tr><td>10-11</td><td>Testing, robustness, and resource analysis</td></tr>
+      <tr><td>12-13</td><td>Final report, GitHub documentation, demonstration</td></tr>
+    </tbody></table>
+  </section>
+  <section>
+    <h2>References</h2>
+    <ol>
+      <li><a href="https://arxiv.org/abs/1804.03209">Warden, Speech Commands, 2018</a>.</li>
+      <li><a href="https://arxiv.org/abs/1711.07128">Zhang et al., Hello Edge, 2017</a>.</li>
+      <li><a href="https://doi.org/10.1109/TASSP.1980.1163420">Davis and Mermelstein, IEEE TASSP, 1980</a>.</li>
+      <li><a href="https://doi.org/10.21437/Interspeech.2015-147">Sainath and Parada, Interspeech, 2015</a>.</li>
+      <li><a href="https://doi.org/10.21437/Interspeech.2016-1393">Tucker et al., Interspeech, 2016</a>.</li>
+      <li><a href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/user_guide/examples/google_speech_command.html">Texas Instruments Tiny ML Tensorlab example</a>.</li>
+    </ol>
+  </section>
+</main>
+<footer>ELEC5305 Acoustics, Speech and Signal Processing - Project Proposal</footer>
+</body>
+</html>

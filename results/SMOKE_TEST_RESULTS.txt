@@ -1,0 +1,14 @@
+ELEC5305_KEYWORD_SPOTTING_SMOKE_TEST
+dataset=Speech Commands v0.02
+feature_shape=49x10
+train_samples=720
+test_samples=240
+knn_k=5
+accuracy=0.391667
+macro_recall=0.391667
+feature_seconds=6.270
+speaker_overlap_count=0
+FRONTEND_PASS=1
+SPLIT_PASS=1
+ABOVE_CHANCE_PASS=1
+SMOKE_TEST_PASS=1

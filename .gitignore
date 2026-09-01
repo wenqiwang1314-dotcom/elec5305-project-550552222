@@ -1,0 +1,11 @@
+# Local corpus and generated MATLAB internals
+data/raw/
+data/local_dataset_path.txt
+*.asv
+*.m~
+results/baseline_model.mat
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/

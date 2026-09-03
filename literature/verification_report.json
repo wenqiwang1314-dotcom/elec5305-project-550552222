@@ -1,0 +1,108 @@
+{
+  "folder": "F:\\CodeX_Workspace\\elec5305-keyword-spotting\\literature\\pdfs",
+  "pdf_count": 8,
+  "valid_count": 8,
+  "invalid_count": 0,
+  "duplicate_groups": [],
+  "ok": true,
+  "items": [
+    {
+      "file": "Almaini_2025_TinyML_Acoustic_Anomaly_Detection.pdf",
+      "bytes": 1191456,
+      "sha256": "8393171F43E534EE5D3BCCF87E6475EC14D7BCB3A7C01FAA3E50286B4D38DF8C",
+      "pages": 5,
+      "encrypted": false,
+      "title_metadata": "TinyML for Acoustic Anomaly Detection in IoT Sensor Networks",
+      "warnings": [],
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "Osman_2021_TinyML_Platforms_Benchmarking.pdf",
+      "bytes": 2510423,
+      "sha256": "0AAF2B9E0916C86B2D05C2303C7AB51C48305979242508065D4BDC081B83C386",
+      "pages": 11,
+      "encrypted": false,
+      "title_metadata": "Microsoft Word - TinyML_Platforms_Benchmarking__Camera_Ready_.docx",
+      "warnings": [],
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "Peter_2020_Resource_Efficient_KWS.pdf",
+      "bytes": 507961,
+      "sha256": "CAA4CF1D61C53FADBCEC8F1526CB8100B636B0FEAC1446B5F284F51D7C49392B",
+      "pages": 7,
+      "encrypted": false,
+      "title_metadata": "",
+      "warnings": [
+        "missing useful PDF title metadata"
+      ],
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "Sorensen_2020_DSCNN_Embedded_KWS.pdf",
+      "bytes": 1964844,
+      "sha256": "0AD2C30B9E9BB991D5EE85B227B0A070F1CF643FED5A25AA22C4707C3202ED2B",
+      "pages": 14,
+      "encrypted": false,
+      "title_metadata": "A depthwise separable convolutional neural network for keyword spotting on an embedded system",
+      "warnings": [],
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "Tang_2018_Deep_Residual_KWS.pdf",
+      "bytes": 695917,
+      "sha256": "62A4CCE1934C085033AD79E337D54DEBF21CD746C38454EE1EE1A337AD98819C",
+      "pages": 5,
+      "encrypted": false,
+      "title_metadata": "",
+      "warnings": [
+        "missing useful PDF title metadata"
+      ],
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "Wang_2017_PCEN_Trainable_Frontend.pdf",
+      "bytes": 428738,
+      "sha256": "88DD3AB78F1B13A0B4B1F3F522F82D516B3FFBEB76D58FE0E26ABEE48761987D",
+      "pages": 5,
+      "encrypted": false,
+      "title_metadata": "",
+      "warnings": [
+        "missing useful PDF title metadata"
+      ],
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "Warden_2018_Speech_Commands_Dataset.pdf",
+      "bytes": 157708,
+      "sha256": "3633226BC49967D980C7E4EF3DF89982C52FAEC93FE7BD0AF1E3E7F0416D9C57",
+      "pages": 11,
+      "encrypted": false,
+      "title_metadata": "",
+      "warnings": [
+        "missing useful PDF title metadata"
+      ],
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "Zhang_2017_Hello_Edge.pdf",
+      "bytes": 1106910,
+      "sha256": "AD447C879A63111C23E42E77CB32279744C53EC45F14FA43917648BFCEDCD873",
+      "pages": 14,
+      "encrypted": false,
+      "title_metadata": "",
+      "warnings": [
+        "missing useful PDF title metadata"
+      ],
+      "errors": [],
+      "valid": true
+    }
+  ]
+}

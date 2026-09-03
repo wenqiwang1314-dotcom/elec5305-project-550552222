@@ -25,19 +25,13 @@ simulation until separate embedded deployment has been implemented and tested.
 
 ## Background and Motivation
 
-Always-on keyword spotting illustrates an important acoustic engineering
-trade-off: stronger models can improve recognition, but they require more
-memory, computation, and energy. MFCCs provide a compact representation of the
-short-term spectral envelope on a perceptually motivated Mel scale. Davis and
-Mermelstein's early comparison established the usefulness of Mel-frequency
-cepstral representations for word recognition. Sainath and Parada showed that
-small-footprint CNNs can reduce false rejects relative to DNN baselines, while
-Tucker et al. demonstrated model compression without increasing runtime cost.
-More recently, Zhang et al. showed that depthwise-separable CNNs can achieve
-strong keyword-spotting accuracy under microcontroller resource constraints. This project was chosen
-because it combines core ELEC5305 concepts - framing, windowing, Fourier
-analysis, filterbanks, cepstral features, and objective evaluation - with a
-practical edge-audio application.
+Always-on keyword spotting must balance recognition, memory, computation, and
+energy. MFCCs compactly describe the short-term spectral envelope on a
+perceptually motivated Mel scale. Prior work establishes MFCCs, compact CNNs,
+depthwise-separable CNNs, compression, and robust front ends as complementary
+design choices. This project therefore connects ELEC5305 concepts - framing,
+windowing, Fourier analysis, filterbanks, cepstral features, and objective
+evaluation - to a practical edge-audio application.
 
 ## Proposed Methodology
 
@@ -55,7 +49,10 @@ coefficients for each utterance. A transparent k-nearest-neighbour classifier
 will provide a smoke-test baseline and verify the complete data path without
 requiring a deep-learning toolbox. The next model will be a compact DSCNN that
 operates directly on the 49 by 10 feature map. Controlled experiments will
-compare the baseline and DSCNN using identical data partitions.
+compare the baseline and DSCNN using identical data partitions. A fixed-manifest
+front-end ablation now also compares coefficient count, frame step,
+pre-emphasis, cepstral mean normalization (CMN), and a literature-motivated
+log-Mel comparator while recording feature-map size and 10 dB robustness.
 
 Evaluation will report overall test accuracy, per-class precision and recall,
 macro recall, and a confusion matrix. Special attention will be given to the
@@ -68,15 +65,10 @@ separate, documented protocol.
 
 ## Expected Outcomes
 
-The project will deliver a runnable MATLAB prototype, a traceable subset
-manifest, MFCC and spectrogram visualisations, reproducible evaluation metrics,
-and a GitHub Pages site explaining the design and results. The minimum outcome
-is a verified end-to-end baseline that performs above the 12-class chance level
-while maintaining speaker-disjoint evaluation. The intended final outcome is a
-DSCNN that improves accuracy and macro recall over the classical baseline with
-an explicitly reported computation and memory cost. A final comparison will
-identify which errors arise from acoustically similar commands and whether the
-unknown class needs stronger augmentation or decision thresholds.
+Deliverables are runnable MATLAB code, an exact manifest, acoustic figures,
+machine-readable metrics, a verified literature set, and a GitHub Pages site.
+The final target is a multi-seed DSCNN comparison with explicit accuracy,
+unknown rejection, robustness, computation, and memory costs.
 
 ## Timeline
 
@@ -96,6 +88,11 @@ unknown class needs stronger augmentation or decision thresholds.
 4. T. N. Sainath and C. Parada, "Convolutional Neural Networks for Small-footprint Keyword Spotting," Proceedings of Interspeech, pp. 1478-1482, 2015, doi:10.21437/Interspeech.2015-147.
 5. G. Tucker, M. Wu, M. Sun, S. Panchapagesan, G. Fu, and S. Vitaladevuni, "Model Compression Applied to Small-Footprint Keyword Spotting," Proceedings of Interspeech, pp. 1878-1882, 2016, doi:10.21437/Interspeech.2016-1393.
 6. Texas Instruments, "Google Speech Command Recognition," Tiny ML Tensorlab 1.4.0 User Guide, 2026.
+7. Y. Wang et al., "Trainable Frontend for Robust and Far-Field Keyword Spotting," ICASSP, 2017, doi:10.1109/ICASSP.2017.7953242.
+8. P. M. Sorensen, B. Epp, and T. May, "A Depthwise Separable Convolutional Neural Network for Keyword Spotting on an Embedded System," EURASIP JASMP, 2020, doi:10.1186/s13636-020-00176-2.
+9. D. Peter, W. Roth, and F. Pernkopf, "Resource-efficient DNNs for Keyword Spotting using Neural Architecture Search and Quantization," arXiv:2012.10138, 2020.
+10. A. Osman et al., "TinyML Platforms Benchmarking," arXiv:2112.01319, 2021.
+11. A. Almaini, J. Folz, and G. Ashour, "TinyML for Acoustic Anomaly Detection in IoT Sensor Networks," arXiv:2603.26135, 2026.
 
 ## Preliminary Evidence
 
@@ -103,7 +100,9 @@ The first smoke test used 720 training and 240 held-out test utterances with a
 manual 5-nearest-neighbour classifier. It produced the required 49 by 10 MFCC
 map, found zero speaker overlap, and reached 39.17% accuracy and macro recall,
 above the 8.33% chance level. Silence recall was 100%, but unknown-word recall
-was 0%, showing that a simple closed-set distance classifier does not provide a
-reliable rejection boundary. This result verifies the pipeline while motivating
-the planned temporal model, data augmentation, and explicit unknown threshold;
-it is not presented as DSCNN or embedded-device performance.
+was 0%. On the identical manifest and classifier, adding utterance CMN raised
+clean accuracy to 47.08% at the same 490-element input; pre-emphasis reached
+41.67%. Denser 98-frame inputs added little despite doubling or tripling the
+feature size. At 10 dB, every clean-trained variant fell to 8.33-10.42%, exposing
+noise mismatch as a more important next problem than increasing MFCC size.
+These are single-subset PC-side diagnostics, not DSCNN or embedded results.

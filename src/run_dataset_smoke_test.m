@@ -98,6 +98,7 @@ imagesc(conf); axis image; colorbar;
 xticks(1:nClass); yticks(1:nClass); xticklabels(cfg.labels); yticklabels(cfg.labels);
 xtickangle(45); xlabel("Predicted label"); ylabel("True label");
 title(sprintf("Real Speech Commands smoke test: 5-NN accuracy %.1f%%",100*accuracy));
+style_figure(f1);
 exportgraphics(f1,fullfile(resultsDir,"confusion_matrix.png"),"Resolution",170);
 exportgraphics(f1,fullfile(assetsDir,"confusion_matrix.png"),"Resolution",170);
 
@@ -110,6 +111,7 @@ subplot(3,1,2); imagesc(T,F,20*log10(abs(S)+1e-8)); axis xy; ylim([0 8000]);
 colorbar; xlabel("Time (s)"); ylabel("Frequency (Hz)"); title("STFT magnitude (dB)");
 subplot(3,1,3); imagesc((0:size(mfccExample,1)-1)*cfg.hopMs/1000,1:cfg.numMfcc,mfccExample.'); axis xy;
 colorbar; xlabel("Frame time (s)"); ylabel("MFCC index"); title("TI-shaped MFCC feature map (49 x 10)");
+style_figure(f2);
 exportgraphics(f2,fullfile(resultsDir,"real_audio_frontend.png"),"Resolution",170);
 exportgraphics(f2,fullfile(assetsDir,"real_audio_frontend.png"),"Resolution",170);
 writematrix(mfccExample,fullfile(resultsDir,"real_example_mfcc_49x10.csv"));
@@ -258,4 +260,17 @@ n=1+floor((numel(x)-L)/H); idx=(0:L-1)'+(0:n-1)*H+1;
 w=0.54-0.46*cos(2*pi*(0:L-1)'/(L-1)); S=fft(x(idx).*w,cfg.nfft,1);
 S=S(1:cfg.nfft/2+1,:); F=(0:cfg.nfft/2)'*cfg.fs/cfg.nfft;
 T=((0:n-1)*H+(L-1)/2)/cfg.fs;
+end
+
+function style_figure(fig)
+dark=[0.08 0.13 0.20];
+axesHandles=findall(fig,"Type","axes");
+set(axesHandles,"Color","w","XColor",dark,"YColor",dark, ...
+    "GridColor",[0.73 0.78 0.83],"GridAlpha",0.55);
+for i=1:numel(axesHandles)
+    axesHandles(i).Title.Color=dark;
+    axesHandles(i).XLabel.Color=dark;
+    axesHandles(i).YLabel.Color=dark;
+end
+fig.Color="w";
 end

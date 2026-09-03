@@ -4,6 +4,7 @@ data/local_dataset_path.txt
 *.asv
 *.m~
 results/baseline_model.mat
+tmp/
 
 # OS/editor files
 .DS_Store

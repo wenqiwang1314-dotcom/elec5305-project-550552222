@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 import html
 import re
 from pathlib import Path
@@ -233,6 +234,59 @@ def build() -> Path:
     story.append(Paragraph("Preliminary Evidence", h2))
     add_body(story, sections["Preliminary Evidence"], body)
 
+    story.append(Paragraph("MFCC Front-End Optimization", h2))
+    story.append(
+        Paragraph(
+            "A controlled ablation keeps the 720/240 manifest and manual 5-NN fixed while changing only the acoustic front end. Clean-trained models are also tested with deterministic 10 dB additive noise. Feature elements are a transparent input-size proxy, not a target-RAM measurement.",
+            body,
+        )
+    )
+    story.append(Spacer(1, 2.5 * mm))
+    result_path = ROOT / "results" / "mfcc_ablation_results.csv"
+    with result_path.open(newline="", encoding="utf-8-sig") as handle:
+        result_rows = list(csv.DictReader(handle))
+    short_names = {
+        "TI_ref_30_20_40_10": "TI reference",
+        "MFCC_30_20_40_13": "13 MFCC",
+        "MFCC_30_10_40_10": "10 ms hop",
+        "MFCC_25_10_40_13": "25/10 ms, 13 MFCC",
+        "MFCC_TI_preemphasis": "TI + pre-emphasis",
+        "MFCC_TI_CMN": "TI + CMN",
+        "MFSC_40_20_20": "20-bin MFSC",
+    }
+    ablation_data = [[
+        Paragraph("<b>Front end</b>", small),
+        Paragraph("<b>Shape</b>", small),
+        Paragraph("<b>Elements</b>", small),
+        Paragraph("<b>Clean</b>", small),
+        Paragraph("<b>10 dB</b>", small),
+    ]]
+    for row in result_rows:
+        ablation_data.append([
+            Paragraph(html.escape(short_names[row["Variant"]]), small),
+            Paragraph(f'{int(float(row["Frames"]))} x {int(float(row["Coefficients"]))}', small),
+            Paragraph(str(int(float(row["FeatureElements"]))), small),
+            Paragraph(f'{100*float(row["CleanAccuracy"]):.2f}%', small),
+            Paragraph(f'{100*float(row["Noise10dBAccuracy"]):.2f}%', small),
+        ])
+    ablation_table = Table(ablation_data, colWidths=[62 * mm, 24 * mm, 25 * mm, 24 * mm, 24 * mm], repeatRows=1)
+    ablation_table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1769AA")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F3F7FA")]),
+        ("BACKGROUND", (0, 6), (-1, 6), colors.HexColor("#E7F8F7")),
+        ("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#B7C8D6")),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("ALIGN", (1, 1), (-1, -1), "RIGHT"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 5),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 5),
+        ("TOPPADDING", (0, 0), (-1, -1), 3.5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 3.5),
+    ]))
+    story.append(ablation_table)
+    story.append(Spacer(1, 2.5 * mm))
+    story.append(Paragraph("CMN reaches 47.08% clean accuracy at the same 490-element input. The near-chance 10 dB results show that noise-aware training is a higher priority than increasing the feature map.", small))
+
     story.append(Paragraph("Appendix: Preliminary Real-Data Results", h2))
     story.append(
         Paragraph(
@@ -243,9 +297,11 @@ def build() -> Path:
     story.append(Spacer(1, 3 * mm))
     frontend = scaled_image(ROOT / "results" / "real_audio_frontend.png", 165 * mm)
     story.append(KeepTogether([frontend, Paragraph("Figure A1. Real waveform, STFT, and TI-shaped 49 x 10 MFCC map.", caption)]))
+    ablation = scaled_image(ROOT / "results" / "mfcc_ablation_accuracy.png", 165 * mm)
+    story.append(KeepTogether([ablation, Paragraph("Figure A2. Controlled front-end accuracy and input-size comparison.", caption)]))
     story.append(PageBreak())
     confusion = scaled_image(ROOT / "results" / "confusion_matrix.png", 155 * mm)
-    story.append(KeepTogether([confusion, Paragraph("Figure A2. Speaker-disjoint 12-class smoke-test confusion matrix (240 test samples).", caption)]))
+    story.append(KeepTogether([confusion, Paragraph("Figure A3. Speaker-disjoint 12-class smoke-test confusion matrix (240 test samples).", caption)]))
 
     doc.build(story, onFirstPage=page_decor, onLaterPages=page_decor)
     print(f"PDF_OUTPUT={OUTPUT}")

@@ -18,6 +18,11 @@ MSPM0G5187. The project uses real Speech Commands v0.02 audio, a documented
 - MATLAB smoke test: hand-written MFCC plus 5-nearest-neighbour baseline.
 - Preliminary result: 39.17% accuracy/macro recall on 240 held-out samples,
   with zero audited speaker overlap (12-class chance level: 8.33%).
+- Controlled MFCC ablation: TI plus utterance CMN reached 47.08% clean accuracy
+  at the same 490-element input; all clean-trained variants remained near
+  chance at 10 dB, motivating noise-aware training.
+- Eight source-supplied/open research PDFs are archived with page-count and
+  SHA-256 verification; ScienceDirect and IEEE publisher records are indexed.
 - DSCNN training, compression, and MCU deployment remain future work.
 
 ## Run
@@ -25,10 +30,15 @@ MSPM0G5187. The project uses real Speech Commands v0.02 audio, a documented
 ```matlab
 cd('F:\CodeX_Workspace\elec5305-keyword-spotting\src')
 run_dataset_smoke_test
+run_mfcc_ablation
 ```
 
 The script writes its exact sample manifest, split audit, metrics, figures, and
 machine-readable PASS/FAIL markers into `results/`.
+
+The detailed analysis is in [MFCC_OPTIMIZATION_ANALYSIS.md](MFCC_OPTIMIZATION_ANALYSIS.md),
+and the corresponding project page is
+https://wenqiwang1314-dotcom.github.io/elec5305-project-550552222/mfcc-optimization.html.
 
 ## Evidence boundary
 

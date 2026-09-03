@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A controlled MATLAB analysis of TI's 49 by 10 MFCC front end for Speech Commands keyword spotting.">
+  <meta name="author" content="Lucas(Wenqi) Wang">
+  <title>MFCC Optimization | ELEC5305</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="compact">
+  <div class="tag">Acoustic front end</div><div class="tag">Controlled ablation</div><div class="tag">MATLAB R2026a</div>
+  <h1>Optimizing the 49 × 10 MFCC Front End</h1>
+  <p>Starting from the Texas Instruments Google Speech Commands configuration, this study changes one bounded front-end choice at a time while holding the data manifest and classifier fixed.</p>
+  <p><strong>Lucas(Wenqi) Wang</strong> · SID 550552222</p>
+  <p class="actions"><a class="button" href="index.html">Back to proposal</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/src/run_mfcc_ablation.m">MATLAB source</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/results/mfcc_ablation_results.csv">Result CSV</a></p>
+</header>
+<main>
+  <section>
+    <h2>Reference signal path</h2>
+    <div class="pipeline" aria-label="MFCC signal-processing pipeline">
+      <div>16 kHz<br>1 s waveform</div><span>→</span><div>30 ms frames<br>20 ms hop</div><span>→</span><div>power spectrum<br>512-point FFT</div><span>→</span><div>40 Mel bins<br>log compression</div><span>→</span><div>10-coefficient<br>DCT</div>
+    </div>
+    <p>For 16,000 samples, a 480-sample frame and 320-sample hop give <code>1 + floor((16000 - 480) / 320) = 49</code> complete frames. TI therefore feeds a DSCNN with <code>[N, 1, 49, 10]</code>: batch, channel, time, and MFCC index.</p>
+    <p class="notice"><strong>Controlled question:</strong> with the exact same 720/240 speaker-disjoint manifest and manual 5-NN, can a front-end change improve recognition without an unjustified increase in feature-map size?</p>
+  </section>
+
+  <section>
+    <h2>Measured ablation</h2>
+    <table class="results"><thead><tr><th>Front end</th><th>Shape</th><th>Size</th><th>Clean</th><th>10 dB</th></tr></thead><tbody>
+      <tr><td>TI reference</td><td>49 × 10</td><td>1.00×</td><td>39.17%</td><td>8.33%</td></tr>
+      <tr><td>13 MFCC</td><td>49 × 13</td><td>1.30×</td><td>40.42%</td><td>8.33%</td></tr>
+      <tr><td>10 ms hop</td><td>98 × 10</td><td>2.00×</td><td>40.83%</td><td>8.33%</td></tr>
+      <tr><td>25 ms / 10 ms / 13 MFCC</td><td>98 × 13</td><td>2.60×</td><td>39.17%</td><td>8.33%</td></tr>
+      <tr><td>TI + pre-emphasis</td><td>49 × 10</td><td>1.00×</td><td>41.67%</td><td>8.33%</td></tr>
+      <tr class="best"><td>TI + cepstral mean normalization</td><td>49 × 10</td><td>1.00×</td><td><strong>47.08%</strong></td><td>10.00%</td></tr>
+      <tr><td>20-bin MFSC comparator</td><td>49 × 20</td><td>2.00×</td><td>28.75%</td><td><strong>10.42%</strong></td></tr>
+    </tbody></table>
+    <figure><img src="assets/mfcc_ablation_accuracy.png" alt="Clean and noisy accuracy with feature-map size for seven front ends"><figcaption>Accuracy and input size. Noise was deterministic 10 dB AWGN applied only at test time.</figcaption></figure>
+    <figure><img src="assets/mfcc_ablation_tradeoff.png" alt="Scatter plot of accuracy against feature-map elements"><figcaption>The CMN candidate (row 6) dominates the other MFCC variants for clean accuracy at the smallest input size.</figcaption></figure>
+  </section>
+
+  <section>
+    <h2>What the result means</h2>
+    <div class="grid">
+      <div class="card"><div class="metric">+7.92 pp</div>CMN clean gain over TI reference, with no increase from 490 elements.</div>
+      <div class="card"><div class="metric">2.60×</div>largest input cost; it produced no clean gain over the TI reference.</div>
+      <div class="card"><div class="metric">≈ chance</div>all variants under 10 dB mismatch: parameter tuning alone is insufficient.</div>
+    </div>
+    <p>CMN is the first candidate to carry into DSCNN training; pre-emphasis is a secondary same-size candidate. The noisy collapse is more consequential than the clean ranking. The next controlled phase must train with realistic noise at multiple SNRs and compare TI MFCC, TI+CMN, MFSC, and PCEN under the same seeds and model budget.</p>
+    <p>Unknown-word recall was only 0–5%, so a continuous system will also require a calibrated rejection rule, false-accepts-per-hour evaluation, and posterior smoothing.</p>
+  </section>
+
+  <section>
+    <h2>Evidence from the papers</h2>
+    <ul>
+      <li><a href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/user_guide/examples/google_speech_command.html">Texas Instruments</a> supplies the 49 × 10 MFCC deployment anchor.</li>
+      <li><a href="https://doi.org/10.1109/ICASSP.2017.7953242">Wang et al. (IEEE ICASSP)</a> motivate PCEN as dynamic gain control in place of static log compression for noisy and far-field KWS.</li>
+      <li><a href="https://doi.org/10.1186/s13636-020-00176-2">Sorensen et al.</a> use 49-frame MFSCs, realistic noise augmentation, quantization, and continuous-stream posterior handling.</li>
+      <li><a href="https://arxiv.org/abs/2012.10138">Peter et al.</a> show that MFCC count must be optimized jointly with network architecture and compute cost.</li>
+      <li><a href="https://doi.org/10.1016/j.neucom.2026.134028">Current ScienceDirect survey</a> positions feature optimization alongside architecture, compression, NAS, and deployment.</li>
+      <li><a href="https://doi.org/10.1109/MIPRO65660.2025.11131906">Medur et al. (IEEE)</a> compare MFCC/CNN TinyML models on Speech Commands v0.02 with quantization and deployment trade-offs.</li>
+    </ul>
+    <p class="notice"><strong>Evidence boundary:</strong> published numbers are not mixed into this experiment because their datasets, partitions, models, augmentation, and hardware differ. The attached anomaly paper informs resource-aware method design but studies binary UrbanSound8K, not this 12-class task.</p>
+  </section>
+
+  <section>
+    <h2>Reproducibility</h2>
+    <p>The run writes aggregate and per-class CSV files, both figures, and explicit pass markers. <code>REFERENCE_SHAPE_PASS=1</code>, <code>REFERENCE_REPRO_PASS=1</code>, <code>FINITE_RESULTS_PASS=1</code>, and <code>MFCC_ABLATION_PASS=1</code> were obtained in MATLAB R2026a Update 4. The verified literature archive contains eight unique readable PDFs with SHA-256 hashes.</p>
+    <p>These are PC-side single-subset diagnostics. They are not DSCNN accuracy, quantized accuracy, target-MCU latency, RAM, flash, NPU, or energy measurements.</p>
+  </section>
+</main>
+<footer>Lucas(Wenqi) Wang · SID 550552222 · ELEC5305 Acoustics, Speech and Signal Processing</footer>
+</body>
+</html>

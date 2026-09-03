@@ -14,7 +14,7 @@
   <h1>Resource-Aware Keyword Spotting</h1>
   <p>A reproducible 12-class speech-command pipeline built from first principles: audio framing, Mel filterbanks, MFCCs, transparent baselines, and a path toward a compact DSCNN.</p>
   <p><strong>Lucas(Wenqi) Wang</strong> · SID 550552222</p>
-  <p class="actions"><a class="button" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/output/pdf/ELEC5305_Project_Proposal_Lucas_Wenqi_Wang_550552222.pdf">Read proposal PDF</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222">View reproducible code</a></p>
+  <p class="actions"><a class="button" href="mfcc-optimization.html">MFCC optimization study</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/output/pdf/ELEC5305_Project_Proposal_Lucas_Wenqi_Wang_550552222.pdf">Read proposal PDF</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222">View reproducible code</a></p>
 </header>
 <main>
   <section>
@@ -24,19 +24,21 @@
       <div class="card"><div class="metric">16 kHz</div>one-second real speech clips</div>
       <div class="card"><div class="metric">49 x 10</div>TI-shaped MFCC input</div>
       <div class="card"><div class="metric">12</div>known, unknown, and silence classes</div>
-      <div class="card"><div class="metric" id="accuracy">39.17%</div>real-data smoke-test accuracy</div>
+      <div class="card"><div class="metric" id="accuracy">47.08%</div>best clean MFCC diagnostic (TI + CMN)</div>
     </div>
   </section>
   <section>
     <h2>Method</h2>
     <p>Speech Commands v0.02 is partitioned using its official validation and testing lists. Each waveform is converted into 30 ms frames at a 20 ms step. Forty Mel-band energies are compressed into ten MFCCs, producing 49 time frames per utterance. A manual 5-nearest-neighbour model establishes the first auditable baseline; a depthwise-separable CNN is the planned next model.</p>
+    <p>The frame count follows directly from <code>1 + floor((16000 - 480) / 320) = 49</code>. The resulting TI-shaped model input is <code>[N, 1, 49, 10]</code>.</p>
     <p class="notice"><strong>Evidence boundary:</strong> the current result uses 720 training and 240 held-out test samples. It is a small MATLAB baseline, not a DSCNN, quantised model, NPU compilation, or hardware energy result.</p>
   </section>
   <section>
     <h2>Preliminary analysis</h2>
     <figure><img src="assets/real_audio_frontend.png" alt="Waveform, STFT and MFCC analysis of a real test utterance"><figcaption>A held-out real utterance represented as waveform, short-time spectrum, and the 49 x 10 MFCC tensor.</figcaption></figure>
     <figure><img src="assets/confusion_matrix.png" alt="Confusion matrix for the real-data smoke test"><figcaption>The confusion matrix exposes command pairs that require stronger temporal modelling.</figcaption></figure>
-    <p>The baseline reached 39.17% accuracy and macro recall, above the 8.33% chance level, with zero audited speaker overlap. Silence recall was 100%, while unknown-word recall was 0%. This failure identifies the main next problem: learn a stronger temporal representation and an explicit rejection boundary for out-of-vocabulary speech.</p>
+    <figure><img src="assets/mfcc_ablation_accuracy.png" alt="Accuracy and feature-map size for seven acoustic front ends"><figcaption>Seven front ends evaluated on the identical fixed manifest and classifier. <a href="mfcc-optimization.html">Read the full optimization analysis.</a></figcaption></figure>
+    <p>The reference baseline reached 39.17% accuracy and macro recall, above the 8.33% chance level, with zero audited speaker overlap. CMN improved clean accuracy to 47.08% without increasing the 490-element input, but every clean-trained configuration collapsed toward chance at 10 dB. Noise-aware training and open-set rejection are therefore higher priorities than increasing the feature map.</p>
   </section>
   <section>
     <h2>Evaluation and deliverables</h2>
@@ -65,6 +67,10 @@
       <li><a href="https://doi.org/10.21437/Interspeech.2015-147">Sainath and Parada, Interspeech, 2015</a>.</li>
       <li><a href="https://doi.org/10.21437/Interspeech.2016-1393">Tucker et al., Interspeech, 2016</a>.</li>
       <li><a href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/user_guide/examples/google_speech_command.html">Texas Instruments Tiny ML Tensorlab example</a>.</li>
+      <li><a href="https://doi.org/10.1109/ICASSP.2017.7953242">Wang et al., PCEN trainable frontend, IEEE ICASSP 2017</a>.</li>
+      <li><a href="https://doi.org/10.1186/s13636-020-00176-2">Sorensen et al., embedded DS-CNN and MFSC, 2020</a>.</li>
+      <li><a href="https://doi.org/10.1016/j.neucom.2026.134028">Garai et al., TinyML KWS review, ScienceDirect 2026</a>.</li>
+      <li><a href="https://doi.org/10.1109/MIPRO65660.2025.11131906">Medur et al., TinyML KWS optimization, IEEE 2025</a>.</li>
     </ol>
   </section>
 </main>

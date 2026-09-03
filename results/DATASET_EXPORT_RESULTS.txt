@@ -1,0 +1,13 @@
+ELEC5305_GITHUB_AUDIO_SUBSET_EXPORT
+dataset=Speech Commands v0.02
+license=CC BY 4.0
+classes=12
+samples=960
+train_samples=720
+test_samples=240
+archive_count=12
+total_archive_bytes=21510291
+max_archive_bytes=1887900
+speaker_overlap_count=0
+license_present=1
+DATASET_EXPORT_PASS=1

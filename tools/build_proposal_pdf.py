@@ -161,7 +161,7 @@ def build() -> Path:
     story.append(Paragraph(html.escape(title), title_style))
     story.append(
         Paragraph(
-            "A MATLAB study of MFCC front ends, speaker-disjoint evaluation, and compact keyword-spotting models for resource-constrained audio systems.",
+            "A MATLAB study of raw-audio preprocessing, compact feature tensors, and NPU-compatible DSCNN architecture for resource-constrained audio classification.",
             subtitle_style,
         )
     )

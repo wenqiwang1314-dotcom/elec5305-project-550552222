@@ -1,9 +1,9 @@
-# Tiny Keyword Spotting with MATLAB
+# Efficient Audio Preprocessing and TI NPU Keyword Spotting
 
-ELEC5305 project exploring a resource-aware 12-class keyword-spotting pipeline
-inspired by Texas Instruments' Google Speech Commands example for the
-MSPM0G5187. The project uses real Speech Commands v0.02 audio, a documented
-`49 x 10` MFCC front end, and reproducible speaker-disjoint evaluation.
+ELEC5305 project studying how raw-audio conditioning, time-frequency feature
+extraction, tensor quantization, and compact model architecture can be jointly
+optimized for 12-class audio classification on a TI NPU. The reproducible anchor
+is Texas Instruments' Google Speech Commands DSCNN example for MSPM0G5187.
 
 **Student:** Lucas(Wenqi) Wang (SID 550552222)
 
@@ -23,6 +23,8 @@ MSPM0G5187. The project uses real Speech Commands v0.02 audio, a documented
   chance at 10 dB, motivating noise-aware training.
 - Eight source-supplied/open research PDFs are archived with page-count and
   SHA-256 verification; ScienceDirect and IEEE publisher records are indexed.
+- Twelve downloadable class archives contain the fixed 960-waveform development
+  subset with provenance, split, format, derivation status, and SHA-256 records.
 - DSCNN training, compression, and MCU deployment remain future work.
 
 ## Run
@@ -31,20 +33,26 @@ MSPM0G5187. The project uses real Speech Commands v0.02 audio, a documented
 cd('F:\CodeX_Workspace\elec5305-keyword-spotting\src')
 run_dataset_smoke_test
 run_mfcc_ablation
+export_github_audio_subset
 ```
 
 The script writes its exact sample manifest, split audit, metrics, figures, and
 machine-readable PASS/FAIL markers into `results/`.
 
 The detailed analysis is in [MFCC_OPTIMIZATION_ANALYSIS.md](MFCC_OPTIMIZATION_ANALYSIS.md),
+the full research protocol is in
+[PREPROCESSING_NPU_RESEARCH_PLAN.md](PREPROCESSING_NPU_RESEARCH_PLAN.md),
 and the corresponding project page is
 https://wenqiwang1314-dotcom.github.io/elec5305-project-550552222/mfcc-optimization.html.
 
+Download the twelve class archives from the
+[dataset page](https://wenqiwang1314-dotcom.github.io/elec5305-project-550552222/dataset.html).
+
 ## Evidence boundary
 
-The smoke test is a small classical baseline used to validate data loading,
-partitioning, and feature extraction. Its accuracy must not be reported as a
-DSCNN, quantized NPU, or embedded-device result.
+The smoke test and MFCC ablation are small classical diagnostics used to isolate
+data loading, partitioning, and preprocessing. Their accuracy and desktop timing
+must not be reported as DSCNN, quantized NPU, or embedded-device results.
 
 ## Project site
 

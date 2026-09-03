@@ -3,23 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="ELEC5305 project proposal for reproducible, resource-aware keyword spotting with MATLAB, MFCCs and Speech Commands v0.02.">
+  <meta name="description" content="ELEC5305 research on efficient raw-audio preprocessing and NPU-compatible DSCNN architectures for 12-class keyword spotting.">
   <meta name="author" content="Lucas(Wenqi) Wang">
-  <title>Resource-Aware Keyword Spotting | ELEC5305</title>
+  <title>Efficient Audio Preprocessing for TI NPU | ELEC5305</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header>
   <div class="tag">ELEC5305 Project Proposal</div><div class="tag">MATLAB</div><div class="tag">Speech Commands v0.02</div>
-  <h1>Resource-Aware Keyword Spotting</h1>
-  <p>A reproducible 12-class speech-command pipeline built from first principles: audio framing, Mel filterbanks, MFCCs, transparent baselines, and a path toward a compact DSCNN.</p>
+  <h1>Efficient Audio Preprocessing for TI NPU Classification</h1>
+  <p>A reproducible study of how raw audio conditioning, time-frequency features, quantization, and compact DSCNN architecture jointly determine 12-class keyword-spotting accuracy and embedded cost.</p>
   <p><strong>Lucas(Wenqi) Wang</strong> · SID 550552222</p>
-  <p class="actions"><a class="button" href="mfcc-optimization.html">MFCC optimization study</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/output/pdf/ELEC5305_Project_Proposal_Lucas_Wenqi_Wang_550552222.pdf">Read proposal PDF</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222">View reproducible code</a></p>
+  <p class="actions"><a class="button" href="dataset.html">Download 12-class dataset</a><a class="button secondary" href="mfcc-optimization.html">MFCC optimization study</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/output/pdf/ELEC5305_Project_Proposal_Lucas_Wenqi_Wang_550552222.pdf">Read proposal PDF</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222">View code</a></p>
 </header>
 <main>
   <section>
     <h2>Research question</h2>
-    <p>How accurately can a compact, resource-aware model distinguish ten voice commands, unknown speech, and silence when evaluated with speaker-disjoint data?</p>
+    <p>Which raw-audio preprocessing pipeline and NPU-compatible DSCNN architecture give the best accuracy, noise robustness, unknown-word rejection, and resource cost for 12-class speech-command classification?</p>
     <div class="grid">
       <div class="card"><div class="metric">16 kHz</div>one-second real speech clips</div>
       <div class="card"><div class="metric">49 x 10</div>TI-shaped MFCC input</div>
@@ -32,6 +32,24 @@
     <p>Speech Commands v0.02 is partitioned using its official validation and testing lists. Each waveform is converted into 30 ms frames at a 20 ms step. Forty Mel-band energies are compressed into ten MFCCs, producing 49 time frames per utterance. A manual 5-nearest-neighbour model establishes the first auditable baseline; a depthwise-separable CNN is the planned next model.</p>
     <p>The frame count follows directly from <code>1 + floor((16000 - 480) / 320) = 49</code>. The resulting TI-shaped model input is <code>[N, 1, 49, 10]</code>.</p>
     <p class="notice"><strong>Evidence boundary:</strong> the current result uses 720 training and 240 held-out test samples. It is a small MATLAB baseline, not a DSCNN, quantised model, NPU compilation, or hardware energy result.</p>
+  </section>
+  <section>
+    <h2>Joint research design</h2>
+    <div class="pipeline" aria-label="Audio preprocessing and model pipeline">
+      <div>Raw WAV<br><small>integrity + level</small></div><span>→</span>
+      <div>Conditioning<br><small>DC, pre-emphasis, noise</small></div><span>→</span>
+      <div>Features<br><small>MFCC, MFSC, PCEN</small></div><span>→</span>
+      <div>INT8 tensor<br><small>scale + layout</small></div><span>→</span>
+      <div>DSCNN<br><small>TI NPU operators</small></div>
+    </div>
+    <p>The baseline begins with TI's 30 ms frame, 20 ms hop, 40 Mel-bin, 10-coefficient MFCC contract. Preprocessing candidates then change one bounded factor at a time: waveform conditioning, normalization, noise-aware training, MFSC or PCEN, and integer scaling. Each surviving front end is paired with a controlled DSCNN width/depth matrix using depthwise and pointwise convolution, global average pooling, and a 12-class output.</p>
+    <p>Accuracy is not the only objective. Front-end latency and memory are reported separately from model parameters, MACs, activation RAM, quantized accuracy, compiler NPU coverage, and later hardware energy.</p>
+  </section>
+  <section>
+    <h2>Reproducible 12-class audio package</h2>
+    <p>The repository contains twelve class-level ZIP archives: ten target commands, <code>_unknown_</code>, and <code>_silence_</code>. Each archive has 60 training and 20 held-out test WAV files at 16 kHz mono, for 960 examples in total. The manifest records provenance, split, sample format, and SHA-256.</p>
+    <p class="actions"><a class="button dark" href="dataset.html">Open dataset downloads</a><a class="button outline" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/PREPROCESSING_NPU_RESEARCH_PLAN.md">Read the full experiment plan</a></p>
+    <p class="notice"><strong>Scope:</strong> this is a compact, auditable course-project subset. The complete 105,829-file Speech Commands v0.02 corpus remains outside normal Git history and is used locally for later full-scale training.</p>
   </section>
   <section>
     <h2>Preliminary analysis</h2>
@@ -52,9 +70,9 @@
     <h2>Timeline</h2>
     <table><thead><tr><th>Weeks</th><th>Milestone</th></tr></thead><tbody>
       <tr><td>1-2</td><td>Scope, dataset audit, literature review</td></tr>
-      <tr><td>3-5</td><td>MFCC front end and reproducible baseline</td></tr>
-      <tr><td>6-9</td><td>DSCNN implementation and validation</td></tr>
-      <tr><td>10-11</td><td>Testing, robustness, and resource analysis</td></tr>
+      <tr><td>3-5</td><td>Waveform conditioning and MFCC/MFSC/PCEN ablations</td></tr>
+      <tr><td>6-9</td><td>NPU-compatible DSCNN width/depth and INT8 studies</td></tr>
+      <tr><td>10-11</td><td>Noise robustness, rejection, compiler, memory, and latency analysis</td></tr>
       <tr><td>12-13</td><td>Final report, GitHub documentation, demonstration</td></tr>
     </tbody></table>
   </section>

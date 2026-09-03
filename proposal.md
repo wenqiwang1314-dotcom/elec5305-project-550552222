@@ -1,4 +1,4 @@
-# Resource-Aware Keyword Spotting with MATLAB and MFCC Features
+# Efficient Audio Preprocessing and TI NPU Architecture for Keyword Spotting
 
 ## Student Information
 
@@ -10,28 +10,25 @@
 
 ## Project Overview
 
-This project investigates a compact keyword-spotting system that recognises ten
+This project investigates an efficient audio-classification system that recognises ten
 spoken commands - down, go, left, no, off, on, right, stop, up, and yes - plus
 unknown speech and silence. Keyword spotting is the small-vocabulary front end
 used by voice-controlled devices before a larger speech recogniser is activated.
 It must be accurate enough to avoid false activations, but computationally small
-enough to run continuously on resource-constrained hardware. The proposed
-solution is a reproducible MATLAB pipeline covering audio preparation,
-Mel-frequency cepstral coefficient (MFCC) extraction, baseline classification,
-and later comparison with a depthwise-separable convolutional neural network
-(DSCNN). The design is inspired by Texas Instruments' 12-class Google Speech
-Commands example for the MSPM0G5187, while the present project remains a PC-side
-simulation until separate embedded deployment has been implemented and tested.
+enough to run continuously. The research focus is the joint design of raw-audio
+conditioning, compact time-frequency features, integer tensor scaling, and an
+NPU-compatible depthwise-separable convolutional neural network (DSCNN). Texas
+Instruments' 12-class Google Speech Commands example for MSPM0G5187 is the
+reference architecture. The present evidence remains PC-side until compilation
+and embedded deployment are separately verified.
 
 ## Background and Motivation
 
-Always-on keyword spotting must balance recognition, memory, computation, and
-energy. MFCCs compactly describe the short-term spectral envelope on a
-perceptually motivated Mel scale. Prior work establishes MFCCs, compact CNNs,
-depthwise-separable CNNs, compression, and robust front ends as complementary
-design choices. This project therefore connects ELEC5305 concepts - framing,
-windowing, Fourier analysis, filterbanks, cepstral features, and objective
-evaluation - to a practical edge-audio application.
+Always-on keyword spotting must balance recognition against preprocessing time,
+feature memory, model computation, and energy. A stronger frontend can reduce
+model burden but is not free. This project connects ELEC5305 framing, Fourier
+analysis, filterbanks, cepstral features, noise robustness, and objective
+evaluation to an end-to-end edge-audio design.
 
 ## Proposed Methodology
 
@@ -42,43 +39,38 @@ speaker do not leak across partitions. Ten commands will be retained as known
 classes. Other word folders will form the unknown class, and one-second regions
 from the background-noise recordings will form the silence class.
 
-MATLAB will first standardise each clip to one second at 16 kHz. The acoustic
-front end will follow the TI example: 30 ms frames, 20 ms frame step, 40 Mel
-filters, and 10 MFCC coefficients. This produces 49 time frames by 10
-coefficients for each utterance. A transparent k-nearest-neighbour classifier
-will provide a smoke-test baseline and verify the complete data path without
-requiring a deep-learning toolbox. The next model will be a compact DSCNN that
-operates directly on the 49 by 10 feature map. Controlled experiments will
-compare the baseline and DSCNN using identical data partitions. A fixed-manifest
-front-end ablation now also compares coefficient count, frame step,
-pre-emphasis, cepstral mean normalization (CMN), and a literature-motivated
-log-Mel comparator while recording feature-map size and 10 dB robustness.
+MATLAB first audits sample rate, channels, duration, clipping, and DC, then tests
+amplitude normalization, pre-emphasis, alignment, and noise augmentation. The TI
+front end - 30 ms frames, 20 ms step, 40 Mel filters, and 10 MFCCs - produces a
+49 by 10 tensor. Controlled ablations compare frame/hop size, MFCC count, CMN,
+log-Mel, and PCEN while recording feature cost. Promising variants will feed the
+same DSCNN matrix: the TI 64-filter/four-block anchor plus bounded width, depth,
+kernel, and stride reductions using NPU-supported operators. Float and int8
+tensors will be checked with saved golden vectors before compilation.
 
-Evaluation will report overall test accuracy, per-class precision and recall,
-macro recall, and a confusion matrix. Special attention will be given to the
-unknown and silence classes because they determine false activations in a
-realistic always-on system. Runtime, parameter count, and estimated memory will
-be recorded for resource awareness. Repeated training seeds will be used before
-drawing model-ranking conclusions. Hardware compilation or energy measurements
-will be reported only if they are later performed on the named target under a
-separate, documented protocol.
+Evaluation reports clean and noisy accuracy, macro/per-class recall, unknown
+rejection, calibration, false accepts per hour, and streaming latency. Frontend
+time/memory is separated from parameters, MACs, activation RAM, NPU coverage,
+and inference time. Model rankings require at least three seeds and
+validation-only selection. Hardware claims require compilation and measurement
+on the named target.
 
 ## Expected Outcomes
 
-Deliverables are runnable MATLAB code, an exact manifest, acoustic figures,
-machine-readable metrics, a verified literature set, and a GitHub Pages site.
-The final target is a multi-seed DSCNN comparison with explicit accuracy,
-unknown rejection, robustness, computation, and memory costs.
+Deliverables include MATLAB code, twelve downloadable class archives with 960
+traceable WAVs, manifests and hashes, acoustic figures, metrics, a verified
+literature set, and GitHub Pages. The final target is a multi-seed DSCNN study
+that jointly reports preprocessing, recognition, robustness, and NPU cost.
 
 ## Timeline
 
 | Weeks | Work package |
 |---|---|
-| 1-2 | Define the 12-class task, audit the dataset, and review literature. |
-| 3-5 | Implement and verify audio loading, official splits, MFCC extraction, and the baseline. |
-| 6-9 | Implement the DSCNN, establish repeated-seed training, and tune only on validation data. |
-| 10-11 | Evaluate test performance, runtime, memory, robustness, and error patterns. |
-| 12-13 | Finalise the report, reproducibility package, GitHub documentation, and demonstration. |
+| 1-2 | Define the 12-class task, data contract, and literature baseline. |
+| 3-5 | Test waveform conditioning, MFCC/MFSC/PCEN, and integer tensor scaling. |
+| 6-9 | Compare NPU-compatible DSCNN width/depth designs with repeated seeds. |
+| 10-11 | Compile and evaluate robustness, rejection, latency, memory, and energy. |
+| 12-13 | Finalise the report, reproducibility package, site, and demonstration. |
 
 ## References
 

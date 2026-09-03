@@ -1,3 +1,5 @@
 *.pdf binary
 *.png binary
 *.mat binary
+*.zip binary
+*.wav binary

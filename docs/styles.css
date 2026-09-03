@@ -7,6 +7,8 @@ header p { max-width:780px; font-size:1.2rem; color:#dbeeff; }
 .actions { display:flex; flex-wrap:wrap; gap:.75rem; margin-top:1.4rem; }
 .button { display:inline-block; padding:.65rem 1rem; border-radius:8px; background:white; color:#12385a; text-decoration:none; font-weight:700; }
 .button.secondary { background:transparent; color:white; border:1px solid #9bdce2; }
+.button.dark { background:var(--blue); color:white; }
+.button.outline { background:transparent; color:var(--blue); border:1px solid var(--blue); }
 .button:hover,.button:focus-visible { transform:translateY(-1px); box-shadow:0 7px 18px #00172f44; }
 h1 { max-width:900px; margin:0; font-size:clamp(2.5rem,6vw,5.5rem); line-height:1.02; letter-spacing:-.04em; }
 h2 { margin-top:2.8rem; font-size:1.8rem; }
@@ -25,7 +27,15 @@ code { padding:.08rem .35rem; border-radius:5px; background:#e8eef4; color:#133a
 .notice { border-left:5px solid var(--cyan); padding:1rem 1.2rem; background:#eafafb; }
 .pipeline { display:flex; align-items:stretch; gap:.55rem; margin:1.5rem 0; overflow-x:auto; }
 .pipeline div { min-width:145px; flex:1; padding:1rem; border-radius:11px; background:white; border:1px solid #c9d7e3; text-align:center; font-weight:700; }
+.pipeline small { color:var(--muted); font-weight:500; }
 .pipeline span { align-self:center; color:var(--blue); font-size:1.6rem; }
+.download-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(245px,1fr)); gap:1rem; margin:1.5rem 0; }
+.download-card { display:flex; flex-direction:column; gap:.55rem; background:white; border:1px solid #d9e1ea; border-radius:14px; padding:1.15rem; box-shadow:0 8px 22px #17324d0d; }
+.download-card h3 { margin:0; font-size:1.2rem; }
+.download-card p { margin:0; color:var(--muted); }
+.download-card .button { align-self:flex-start; background:var(--blue); color:white; }
+.checksum { font:0.82rem/1.4 ui-monospace,SFMono-Regular,Consolas,monospace; word-break:break-all; color:var(--muted); }
+.compact-list { columns:2; column-gap:2rem; }
 .results th:not(:first-child),.results td:not(:first-child) { text-align:right; white-space:nowrap; }
 .results .best { background:#eafafb; }
 footer { padding:2rem; color:var(--muted); text-align:center; }
@@ -35,4 +45,5 @@ footer { padding:2rem; color:var(--muted); text-align:center; }
   .pipeline span { display:none; }
   .pipeline { display:grid; grid-template-columns:1fr 1fr; }
   .results { display:block; overflow-x:auto; }
+  .compact-list { columns:1; }
 }

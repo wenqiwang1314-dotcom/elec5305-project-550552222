@@ -42,7 +42,8 @@ The full 3.34 GB local corpus remains the source for later full-scale training.
 
 - Verify sample rate, channel count, duration, finite values, clipping, and DC.
 - Compare no conditioning, DC removal, RMS normalization, peak normalization,
-  pre-emphasis, and controlled automatic gain control.
+  controlled automatic gain control, and pre-emphasis coefficients 0, 0.4,
+  0.7, and 0.97.
 - Test fixed one-second padding/cropping against energy/VAD-aligned cropping.
 - Add reproducible time shift, gain, impulse response, and realistic noise
   augmentation only to training data.
@@ -54,6 +55,14 @@ The full 3.34 GB local corpus remains the source for later full-scale training.
 - Sweep frame/hop only within bounded sets: 25/10, 30/10, 30/20, and 40/20 ms.
 - Compare 10, 13, and 20 coefficients while recording tensor elements.
 - Compare log-Mel/MFSC, MFCC, MFCC plus cepstral mean normalization, and PCEN.
+- Precompute the window, triangular Mel matrix, and DCT matrix. Record one-time
+  setup separately from per-clip runtime and require the cached and uncached
+  feature maps to agree within a declared tolerance.
+- Use per-coefficient temporal mean/std as a compact diagnostic only. Retain the
+  ordered 49 x 10 map for DSCNN training because aggregation discards temporal
+  evolution.
+- Gate static+delta+delta-delta input as a 3 x 49 x 10 comparator: it triples
+  input elements and must justify that cost against learned temporal kernels.
 - Record frontend wall time on PC now; later measure MCU cycles, working RAM,
   and energy separately from NPU inference.
 
@@ -144,3 +153,5 @@ is a screening result, not a final model ranking.
 - P. Warden, [Speech Commands](https://arxiv.org/abs/1804.03209), 2018.
 - Y. Wang et al., [Trainable Frontend for Robust and Far-Field Keyword Spotting](https://doi.org/10.1109/ICASSP.2017.7953242), ICASSP 2017.
 - P. M. Sorensen et al., [A Depthwise Separable CNN for Keyword Spotting on an Embedded System](https://doi.org/10.1186/s13636-020-00176-2), 2020.
+- K. S. Rao and S. G. Koolagudi, *Robust Emotion Recognition using Spectral and Prosodic Features*, Appendix A, Springer, 2013, doi:10.1007/978-1-4614-6360-3.
+- T. Giannakopoulos and A. Pikrakis, *Introduction to Audio Analysis: A MATLAB Approach*, Chapter 4, Elsevier, 2014, doi:10.1016/B978-0-08-099388-1.00004-2.

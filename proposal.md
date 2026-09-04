@@ -28,7 +28,10 @@ Always-on keyword spotting must balance recognition against preprocessing time,
 feature memory, model computation, and energy. A stronger frontend can reduce
 model burden but is not free. This project connects ELEC5305 framing, Fourier
 analysis, filterbanks, cepstral features, noise robustness, and objective
-evaluation to an end-to-end edge-audio design.
+evaluation to an end-to-end edge-audio design. The course references also frame
+feature extraction as data-rate reduction: temporal summaries are compact but
+discard ordering, while precomputed Mel and DCT matrices can reduce runtime
+without changing the representation.
 
 ## Proposed Methodology
 
@@ -43,7 +46,10 @@ MATLAB first audits sample rate, channels, duration, clipping, and DC, then test
 amplitude normalization, pre-emphasis, alignment, and noise augmentation. The TI
 front end - 30 ms frames, 20 ms step, 40 Mel filters, and 10 MFCCs - produces a
 49 by 10 tensor. Controlled ablations compare frame/hop size, MFCC count, CMN,
-log-Mel, and PCEN while recording feature cost. Promising variants will feed the
+log-Mel, and PCEN while recording feature cost. Pre-emphasis is swept rather
+than fixed; cached constants must reproduce the reference tensor. Mean/std and
+delta features are gated controls because they remove ordering or increase
+input size. Promising variants will feed the
 same DSCNN matrix: the TI 64-filter/four-block anchor plus bounded width, depth,
 kernel, and stride reductions using NPU-supported operators. Float and int8
 tensors will be checked with saved golden vectors before compilation.
@@ -85,6 +91,8 @@ that jointly reports preprocessing, recognition, robustness, and NPU cost.
 9. D. Peter, W. Roth, and F. Pernkopf, "Resource-efficient DNNs for Keyword Spotting using Neural Architecture Search and Quantization," arXiv:2012.10138, 2020.
 10. A. Osman et al., "TinyML Platforms Benchmarking," arXiv:2112.01319, 2021.
 11. A. Almaini, J. Folz, and G. Ashour, "TinyML for Acoustic Anomaly Detection in IoT Sensor Networks," arXiv:2603.26135, 2026.
+12. K. S. Rao and S. G. Koolagudi, "Robust Emotion Recognition using Spectral and Prosodic Features," Appendix A, Springer, 2013, doi:10.1007/978-1-4614-6360-3.
+13. T. Giannakopoulos and A. Pikrakis, "Introduction to Audio Analysis: A MATLAB Approach," Chapter 4, Elsevier, 2014, doi:10.1016/B978-0-08-099388-1.00004-2.
 
 ## Preliminary Evidence
 

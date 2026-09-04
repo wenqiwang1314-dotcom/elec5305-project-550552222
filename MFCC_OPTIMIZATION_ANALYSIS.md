@@ -17,6 +17,22 @@ values per clip before quantization. The MATLAB implementation follows the
 signal path from first principles: framing, Hamming window, power spectrum,
 triangular Mel filterbank, stabilized log compression, and orthonormal DCT.
 
+### Course-reference constraints
+
+The supplied MFCC appendix explains why speech is processed in short,
+overlapping windows, why pre-emphasis is a tunable filter rather than a fixed
+truth, and why low-order log-Mel DCT coefficients capture the smooth spectral
+envelope. The supplied audio-features chapter frames feature extraction as both
+representation and data-rate reduction. It also warns that mean/std or longer-
+term averaging discards temporal evolution and recommends precomputing constant
+Mel-filter and DCT quantities for lower runtime.
+
+This leads to three explicit controls: a bounded pre-emphasis sweep, a compact
+MFCC mean/std diagnostic that is not substituted for the ordered DSCNN map, and
+a cached frontend that must reproduce the uncached 49 x 10 tensor numerically.
+Static+delta+delta-delta features remain gated because they would expand the
+input from 490 to 1470 elements before any model benefit is demonstrated.
+
 ## 2. Controlled question
 
 The question is not whether a larger model can beat the smoke test. It is:
@@ -129,3 +145,5 @@ a transparent storage/activation proxy, not a full RAM estimate.
 7. S. Garai et al., "Advances in Small-footprint Keyword Spotting for TinyML," Neurocomputing, vol. 695, 134028, 2026, doi:10.1016/j.neucom.2026.134028.
 8. E. van der Westhuizen et al., "Feature Learning for Efficient ASR-free Keyword Spotting in Low-resource Languages," Computer Speech & Language, vol. 71, 101275, 2022, doi:10.1016/j.csl.2021.101275.
 9. P. Medur, M. Lubbers, and G. Mausa, "Optimizing Keyword Spotting Classifier Based on Tiny Machine Learning for Low-Power Embedded Devices," MIPRO, 2025, doi:10.1109/MIPRO65660.2025.11131906.
+10. K. S. Rao and S. G. Koolagudi, *Robust Emotion Recognition using Spectral and Prosodic Features*, Appendix A, pp. 109-112, Springer, 2013, doi:10.1007/978-1-4614-6360-3.
+11. T. Giannakopoulos and A. Pikrakis, *Introduction to Audio Analysis: A MATLAB Approach*, Chapter 4, pp. 59-103, Elsevier, 2014, doi:10.1016/B978-0-08-099388-1.00004-2.

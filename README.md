@@ -40,6 +40,8 @@ The script writes its exact sample manifest, split audit, metrics, figures, and
 machine-readable PASS/FAIL markers into `results/`.
 
 The detailed analysis is in [MFCC_OPTIMIZATION_ANALYSIS.md](MFCC_OPTIMIZATION_ANALYSIS.md),
+the supplied course references are mapped to testable design decisions in
+[COURSE_REFERENCE_NOTES.md](COURSE_REFERENCE_NOTES.md),
 the full research protocol is in
 [PREPROCESSING_NPU_RESEARCH_PLAN.md](PREPROCESSING_NPU_RESEARCH_PLAN.md),
 and the corresponding project page is

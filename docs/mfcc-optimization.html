@@ -14,7 +14,7 @@
   <h1>Optimizing the 49 × 10 MFCC Front End</h1>
   <p>Starting from the Texas Instruments Google Speech Commands configuration, this study changes one bounded front-end choice at a time while holding the data manifest and classifier fixed.</p>
   <p><strong>Lucas(Wenqi) Wang</strong> · SID 550552222</p>
-  <p class="actions"><a class="button" href="index.html">Back to proposal</a><a class="button secondary" href="dataset.html">Download dataset</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/src/run_mfcc_ablation.m">MATLAB source</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/results/mfcc_ablation_results.csv">Result CSV</a></p>
+  <p class="actions"><a class="button" href="index.html">Back to proposal</a><a class="button secondary" href="dataset.html">Download dataset</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/COURSE_REFERENCE_NOTES.md">Course reference map</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/src/run_mfcc_ablation.m">MATLAB source</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/results/mfcc_ablation_results.csv">Result CSV</a></p>
 </header>
 <main>
   <section>
@@ -53,8 +53,21 @@
   </section>
 
   <section>
+    <h2>What the course references change</h2>
+    <div class="grid">
+      <div class="card"><strong>Bound pre-emphasis</strong><br>Test 0, 0.4, 0.7, and 0.97; do not assume one speech-textbook value is universal.</div>
+      <div class="card"><strong>Preserve time</strong><br>Mean/std is a compact diagnostic, while the ordered 49 × 10 map remains the DSCNN input.</div>
+      <div class="card"><strong>Cache constants</strong><br>Precompute the window, Mel weights, and DCT matrix, then prove numerical equivalence.</div>
+      <div class="card"><strong>Gate dynamics</strong><br>Delta and delta-delta make a 3 × 49 × 10 input and must justify the 3× feature cost.</div>
+    </div>
+    <p>These constraints come from the supplied MFCC appendix and <em>Audio Features</em> chapter. Their examples explain the signal-processing mechanisms, but their emotion, speech/music, and genre results are not treated as performance evidence for this 12-class dataset.</p>
+  </section>
+
+  <section>
     <h2>Evidence from the papers</h2>
     <ul>
+      <li><a href="https://doi.org/10.1007/978-1-4614-6360-3">Rao and Koolagudi, Appendix A</a> motivate bounded pre-emphasis, short overlapping frames, low-order MFCCs, and optional temporal derivatives.</li>
+      <li><a href="https://doi.org/10.1016/B978-0-08-099388-1.00004-2">Giannakopoulos and Pikrakis, Chapter 4</a> motivate short-term feature sequences, explicit aggregation trade-offs, and precomputed Mel/DCT constants.</li>
       <li><a href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/user_guide/examples/google_speech_command.html">Texas Instruments</a> supplies the 49 × 10 MFCC deployment anchor.</li>
       <li><a href="https://doi.org/10.1109/ICASSP.2017.7953242">Wang et al. (IEEE ICASSP)</a> motivate PCEN as dynamic gain control in place of static log compression for noisy and far-field KWS.</li>
       <li><a href="https://doi.org/10.1186/s13636-020-00176-2">Sorensen et al.</a> use 49-frame MFSCs, realistic noise augmentation, quantization, and continuous-stream posterior handling.</li>
@@ -62,7 +75,7 @@
       <li><a href="https://doi.org/10.1016/j.neucom.2026.134028">Current ScienceDirect survey</a> positions feature optimization alongside architecture, compression, NAS, and deployment.</li>
       <li><a href="https://doi.org/10.1109/MIPRO65660.2025.11131906">Medur et al. (IEEE)</a> compare MFCC/CNN TinyML models on Speech Commands v0.02 with quantization and deployment trade-offs.</li>
     </ul>
-    <p class="notice"><strong>Evidence boundary:</strong> published numbers are not mixed into this experiment because their datasets, partitions, models, augmentation, and hardware differ. The attached anomaly paper informs resource-aware method design but studies binary UrbanSound8K, not this 12-class task.</p>
+    <p class="notice"><strong>Evidence boundary:</strong> published numbers are not mixed into this experiment because their datasets, partitions, models, augmentation, and hardware differ. The course-book examples and attached anomaly paper inform method design but study different classification tasks.</p>
   </section>
 
   <section>

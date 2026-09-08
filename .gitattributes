@@ -3,3 +3,14 @@
 *.mat binary
 *.zip binary
 *.wav binary
+
+# Preserve exact upstream/reference bytes and published release hashes.
+/research/ti_gsc_matlab_mvp/** -text
+/docs/assets/research/** -text
+/README.md text eol=lf
+/RESEARCH_FOCUS.md text eol=lf
+/PREPROCESSING_NPU_RESEARCH_PLAN.md text eol=lf
+/docs/index.html text eol=lf
+/docs/dsp-model-codesign.html text eol=lf
+/tools/import_dsp_research.py text eol=lf
+/tools/verify_dsp_release.py text eol=lf

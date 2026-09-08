@@ -10,13 +10,21 @@
 </head>
 <body>
 <header>
-  <div class="tag">ELEC5305 Project Proposal</div><div class="tag">MATLAB</div><div class="tag">Speech Commands v0.02</div>
-  <h1>Efficient Audio Preprocessing for TI NPU Classification</h1>
+  <div class="tag">ELEC5305 Research Workbench</div><div class="tag">MATLAB</div><div class="tag">Speech Commands v0.02</div>
+  <h1>DSP Front-End and DSCNN Co-Optimization</h1>
   <p>A reproducible study of how raw audio conditioning, time-frequency features, quantization, and compact DSCNN architecture jointly determine 12-class keyword-spotting accuracy and embedded cost.</p>
   <p><strong>Lucas(Wenqi) Wang</strong> · SID 550552222</p>
-  <p class="actions"><a class="button" href="dataset.html">Download 12-class dataset</a><a class="button secondary" href="mfcc-optimization.html">MFCC optimization study</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/output/pdf/ELEC5305_Project_Proposal_Lucas_Wenqi_Wang_550552222.pdf">Read proposal PDF</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222">View code</a></p>
+  <p class="actions"><a class="button" href="dsp-model-codesign.html">Primary DSP + model research</a><a class="button secondary" href="dataset.html">Download 12-class dataset</a><a class="button secondary" href="mfcc-optimization.html">MFCC optimization study</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/output/pdf/ELEC5305_Project_Proposal_Lucas_Wenqi_Wang_550552222.pdf">Read proposal PDF</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222">View code</a></p>
 </header>
 <main>
+  <section>
+    <h2>Primary work: the signal processing before deep learning</h2>
+    <p>Follow one real speech recording through the modular MATLAB front end, inspect every stage, and relate the resulting representation to the TI DSCNN architecture. The research programme starts with exact DSP reproducibility and progresses to jointly optimized features, quantization and model structure.</p>
+    <figure><a href="assets/research/paper_pipeline.pdf"><img src="assets/research/paper_pipeline.png" alt="Real-audio DSP pipeline with intermediate processing effects"></a><figcaption>Real-audio DSP walkthrough. <a href="assets/research/paper_pipeline.pdf">Paper pipeline PDF</a> · <a href="assets/research/paper_pipeline.svg">SVG</a>.</figcaption></figure>
+    <figure><a href="assets/research/dscnn_plotneuralnet.pdf"><img loading="lazy" src="assets/research/dscnn_plotneuralnet.png" alt="TI DSCNN architecture rendered using PlotNeuralNet"></a><figcaption>Configurable PlotNeuralNet architecture. <a href="assets/research/dscnn_plotneuralnet.pdf">Model PDF</a> · <a href="assets/research/dscnn_plotneuralnet.svg">SVG</a>.</figcaption></figure>
+    <p><a class="button dark" href="dsp-model-codesign.html">Explore stage figures and research protocol</a></p>
+    <p class="notice">The MATLAB refactor preserves the original arithmetic exactly. These figures document DSP processing and sourced model architecture; trained DSCNN accuracy, TI SDK parity and hardware performance remain open research work.</p>
+  </section>
   <section>
     <h2>Research question</h2>
     <p>Which raw-audio preprocessing pipeline and NPU-compatible DSCNN architecture give the best accuracy, noise robustness, unknown-word rejection, and resource cost for 12-class speech-command classification?</p>
@@ -24,7 +32,7 @@
       <div class="card"><div class="metric">16 kHz</div>one-second real speech clips</div>
       <div class="card"><div class="metric">49 x 10</div>TI-shaped MFCC input</div>
       <div class="card"><div class="metric">12</div>known, unknown, and silence classes</div>
-      <div class="card"><div class="metric" id="accuracy">47.08%</div>best clean MFCC diagnostic (TI + CMN)</div>
+      <div class="card"><div class="metric" id="accuracy">47.08%</div>earlier 5-NN clean diagnostic (TI + CMN)</div>
     </div>
   </section>
   <section>
@@ -52,7 +60,7 @@
     <p class="notice"><strong>Scope:</strong> this is a compact, auditable course-project subset. The complete 105,829-file Speech Commands v0.02 corpus remains outside normal Git history and is used locally for later full-scale training.</p>
   </section>
   <section>
-    <h2>Preliminary analysis</h2>
+    <h2>Earlier classical diagnostics</h2>
     <figure><img src="assets/real_audio_frontend.png" alt="Waveform, STFT and MFCC analysis of a real test utterance"><figcaption>A held-out real utterance represented as waveform, short-time spectrum, and the 49 x 10 MFCC tensor.</figcaption></figure>
     <figure><img src="assets/confusion_matrix.png" alt="Confusion matrix for the real-data smoke test"><figcaption>The confusion matrix exposes command pairs that require stronger temporal modelling.</figcaption></figure>
     <figure><img src="assets/mfcc_ablation_accuracy.png" alt="Accuracy and feature-map size for seven acoustic front ends"><figcaption>Seven front ends evaluated on the identical fixed manifest and classifier. <a href="mfcc-optimization.html">Read the full optimization analysis.</a></figcaption></figure>

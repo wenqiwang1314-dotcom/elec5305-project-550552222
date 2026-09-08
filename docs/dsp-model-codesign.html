@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Reproducible pre-model DSP research: real-audio MATLAB walkthrough, PlotNeuralNet DSCNN figures and a joint optimization protocol.">
+  <title>DSP Front-End and DSCNN Co-Design | ELEC5305</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="compact">
+  <div class="tag">Primary research focus</div><div class="tag">DSP + deep learning</div>
+  <h1>What should the model hear?</h1>
+  <p>Study the digital signal processing before the neural network, then jointly optimize the representation, quantization interface and DSCNN for speech accuracy and complete-pipeline cost.</p>
+  <p class="actions"><a class="button" href="assets/research/paper_pipeline.pdf">DSP pipeline PDF</a><a class="button" href="assets/research/dscnn_plotneuralnet.pdf">DSCNN architecture PDF</a><a class="button secondary" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/tree/main/research/ti_gsc_matlab_mvp">Reproducible source</a><a class="button secondary" href="index.html">Project home</a></p>
+</header>
+<main>
+  <section>
+    <h2>1. Follow one real recording through the DSP front end</h2>
+    <p>The bundled Speech Commands recording <code>yes/004ae714_nohash_0.wav</code> is processed by modular MATLAB functions with detailed English comments. Each stage produces an effect plot and numerical arrays. The label “yes” comes from the dataset; no model prediction is implied.</p>
+    <figure><a href="assets/research/paper_pipeline.pdf"><img src="assets/research/paper_pipeline.png" alt="Paper-style workflow showing real audio, frames, Hamming window, FFT, power, Mel filtering, logarithm and MFCC output"></a><figcaption>Figure 1. Real-audio DSP walkthrough, preserving the original MATLAB arithmetic. <a href="assets/research/paper_pipeline.pdf">Vector PDF</a> · <a href="assets/research/paper_pipeline.svg">SVG</a>. The temporal summary is for the historical centroid diagnostic; the complete MFCC map is the model-facing tensor.</figcaption></figure>
+    <table class="results"><thead><tr><th>Stage</th><th>Frozen reference</th></tr></thead><tbody>
+      <tr><td>Input</td><td>16 kHz, mono, exactly 16,000 samples</td></tr>
+      <tr><td>Framing / window</td><td>480 samples / 320 hop; symmetric Hamming; 49 frames</td></tr>
+      <tr><td>Spectrum</td><td>512-point FFT; 257 bins; |FFT|² / 512</td></tr>
+      <tr><td>Mel / logarithm</td><td>40 filters, 20–8,000 Hz; ln(max(E, 10⁻¹⁰))</td></tr>
+      <tr><td>DCT / interface</td><td>Orthonormal DCT-II c0–c9; [N, 1, 49, 10]</td></tr>
+    </tbody></table>
+    <p>The frame count is <code>1 + floor((16000 − 480) / 320) = 49</code>; the final 160 samples are outside the last complete frame. The baseline adds no implicit pre-emphasis, normalization, resampling or padding.</p>
+    <details><summary>Inspect all ten module-effect figures</summary>
+      <div class="grid">
+        <figure><img loading="lazy" src="assets/research/00_audio.png" alt="Original real speech waveform"><figcaption>00 · Input waveform</figcaption></figure>
+        <figure><img loading="lazy" src="assets/research/01_framing.png" alt="Overlapping frame selection"><figcaption>01 · Framing</figcaption></figure>
+        <figure><img loading="lazy" src="assets/research/02_window.png" alt="Hamming window and windowed speech frames"><figcaption>02 · Windowing</figcaption></figure>
+        <figure><img loading="lazy" src="assets/research/03_fft.png" alt="FFT output"><figcaption>03 · FFT</figcaption></figure>
+        <figure><img loading="lazy" src="assets/research/04_power.png" alt="Frame power spectra"><figcaption>04 · Power spectrum</figcaption></figure>
+        <figure><img loading="lazy" src="assets/research/05_mel.png" alt="Mel filterbank and band energies"><figcaption>05 · Mel filtering</figcaption></figure>
+        <figure><img loading="lazy" src="assets/research/06_logmel.png" alt="Log Mel spectral representation"><figcaption>06 · Log compression</figcaption></figure>
+        <figure><img loading="lazy" src="assets/research/07_mfcc.png" alt="MFCC coefficients across 49 frames"><figcaption>07 · DCT / MFCC</figcaption></figure>
+        <figure><img loading="lazy" src="assets/research/08_summary.png" alt="Temporal summary for the centroid diagnostic"><figcaption>08 · Diagnostic summary</figcaption></figure>
+        <figure><img loading="lazy" src="assets/research/09_export.png" alt="Tensor packing and binary export"><figcaption>09 · Tensor export</figcaption></figure>
+      </div>
+    </details>
+  </section>
+  <section>
+    <h2>2. Make the downstream model explicit</h2>
+    <figure><a href="assets/research/dscnn_plotneuralnet.pdf"><img loading="lazy" src="assets/research/dscnn_plotneuralnet.png" alt="TI DSCNN three dimensional architecture: convolutional stem, four depthwise separable blocks, pooling and classifier"></a><figcaption>Figure 2. TI DSCNN_NPU architecture drawn with PlotNeuralNet. Green bands denote batch normalization and ReLU. Cuboid geometry is illustrative; labels give tensor dimensions. <a href="assets/research/dscnn_plotneuralnet.pdf">Vector PDF</a> · <a href="assets/research/dscnn_plotneuralnet.svg">SVG</a>.</figcaption></figure>
+    <p>A 64-channel 10×4 convolution with stride 2 precedes four independent DW3×3 + PW1×1 blocks. Dropout is active during training. Adaptive average pooling, flattening and a linear layer produce 12 logits. The model contains no residual branch or concatenation.</p>
+    <details><summary>View the depthwise-separable block</summary><figure><img loading="lazy" src="assets/research/ds_block_plotneuralnet.png" alt="Depthwise spatial filtering followed by pointwise channel mixing"><figcaption><a href="assets/research/ds_block_plotneuralnet.pdf">Download block PDF</a>. Each convolution is followed by BN and ReLU.</figcaption></figure></details>
+    <p>Change <code>model.json</code> for channels, block count, input dimensions or kernel geometry, and <code>style.json</code> for layout. The retained Python generator propagates shapes and compiles actual PlotNeuralNet/TikZ primitives into PDF, SVG and PNG. <a href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/tree/main/research/ti_gsc_matlab_mvp/plotneuralnet">Open source and rebuild instructions</a>.</p>
+  </section>
+  <section>
+    <h2>3. Optimize the complete signal-to-decision path</h2>
+    <p>A front end changes the information available to the model and its computational workload. Increasing time resolution or Mel-band count may improve recognition while enlarging activation memory; a better representation may permit a narrower model. Evaluate these as paired experiments.</p>
+    <div class="grid">
+      <div class="card"><strong>First: equivalent DSP</strong><p>Cache the window, filterbank and DCT; reduce allocations. Verify numerical agreement and measure setup separately from steady-state cost.</p></div>
+      <div class="card"><strong>Then: representation</strong><p>Control conditioning, normalization and compression at a fixed input shape. Retrain the same backbone with matched budgets.</p></div>
+      <div class="card"><strong>Then: co-design</strong><p>Pair time/frequency dimensions with model width, depth and quantization. Compare accuracy, robustness and total resource cost.</p></div>
+    </div>
+    <p>Use frozen partitions, training-only calibration, validation-based selection and at least three matched seeds. Keep the final test set for final evaluation. Utterance normalization and streaming normalization have different causality and delay; record that distinction.</p>
+    <p>Measure DSP, packing/quantization, inference and post-processing costs. Analytical MAC counts do not substitute for measured latency or energy. Device energy comparisons require explicit acquisition, idle-baseline and MCU-versus-board boundaries.</p>
+    <p><a class="button dark" href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/blob/main/RESEARCH_FOCUS.md">Read the active research protocol</a></p>
+  </section>
+  <section>
+    <h2>Evidence and reproducibility</h2>
+    <p class="notice"><strong>Verified:</strong> the MATLAB refactor agrees exactly with the frozen original across 53 front-end probes and 11 workflow variables. The real example exports a 49×10 MFCC map and round-trips 490 float32 values. <strong>Open work:</strong> TI SDK numerical parity, trained DSCNN evaluation, quantized inference, compiler acceptance and hardware timing/energy.</p>
+    <p>The earlier <a href="mfcc-optimization.html">5-NN MFCC ablation</a> remains a separate diagnostic. Its accuracy must not be presented as a DSCNN result. Source licenses, the waveform attribution and release hashes are retained with the <a href="https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222/tree/main/research/ti_gsc_matlab_mvp">workbench</a>.</p>
+    <p>Architecture sources: <a href="https://github.com/TexasInstruments/tinyml-modelzoo/blob/b5fcd63e5d28fd7c9f1a7ea0f85b5778adcd9527/tinyml_modelzoo/models/audio.py#L8-L86">pinned TI model implementation</a> and <a href="https://github.com/HarisIqbal88/PlotNeuralNet/tree/e96bc852189c2089dd500527a0a01a5a36e8977e">pinned PlotNeuralNet</a>.</p>
+  </section>
+</main>
+<footer>ELEC5305 · DSP front-end and DSCNN co-design · Updated 8 September 2026</footer>
+</body>
+</html>

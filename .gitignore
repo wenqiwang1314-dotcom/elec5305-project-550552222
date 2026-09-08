@@ -10,3 +10,12 @@ tmp/
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Rebuildable research outputs and local compiler/runtime installations.
+research/ti_gsc_matlab_mvp/output/
+research/ti_gsc_matlab_mvp/plotneuralnet/output/
+research/ti_gsc_matlab_mvp/plotneuralnet/tools/tectonic/
+research/ti_gsc_matlab_mvp/plotneuralnet/tools/*.zip
+**/.venv/
+**/__pycache__/
+*.pyc

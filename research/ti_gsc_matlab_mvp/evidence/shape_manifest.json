@@ -1,0 +1,239 @@
+{
+  "name": "TI DSCNN_NPU",
+  "model_sha256": "b883f707bae95f8e597f3b66902918c27ab52bd9b2a4df1d54000018d1483c10",
+  "plotneuralnet_commit": "e96bc852189c2089dd500527a0a01a5a36e8977e",
+  "source_commit": "b5fcd63e5d28fd7c9f1a7ea0f85b5778adcd9527",
+  "layers": [
+    {
+      "name": "input",
+      "output": [
+        1,
+        49,
+        10
+      ]
+    },
+    {
+      "name": "stem",
+      "output": [
+        64,
+        25,
+        5
+      ]
+    },
+    {
+      "name": "ds1_dw",
+      "output": [
+        64,
+        25,
+        5
+      ]
+    },
+    {
+      "name": "ds1_pw",
+      "output": [
+        64,
+        25,
+        5
+      ]
+    },
+    {
+      "name": "ds2_dw",
+      "output": [
+        64,
+        25,
+        5
+      ]
+    },
+    {
+      "name": "ds2_pw",
+      "output": [
+        64,
+        25,
+        5
+      ]
+    },
+    {
+      "name": "ds3_dw",
+      "output": [
+        64,
+        25,
+        5
+      ]
+    },
+    {
+      "name": "ds3_pw",
+      "output": [
+        64,
+        25,
+        5
+      ]
+    },
+    {
+      "name": "ds4_dw",
+      "output": [
+        64,
+        25,
+        5
+      ]
+    },
+    {
+      "name": "ds4_pw",
+      "output": [
+        64,
+        25,
+        5
+      ]
+    },
+    {
+      "name": "pool",
+      "output": [
+        64,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "flatten",
+      "output": [
+        64
+      ]
+    },
+    {
+      "name": "logits",
+      "output": [
+        12
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "index": 1,
+      "input": [
+        64,
+        25,
+        5
+      ],
+      "depthwise": [
+        64,
+        25,
+        5
+      ],
+      "output": [
+        64,
+        25,
+        5
+      ],
+      "groups": 64,
+      "channels": 64,
+      "kernel": [
+        3,
+        3
+      ],
+      "stride": [
+        1,
+        1
+      ],
+      "padding": [
+        1,
+        1
+      ]
+    },
+    {
+      "index": 2,
+      "input": [
+        64,
+        25,
+        5
+      ],
+      "depthwise": [
+        64,
+        25,
+        5
+      ],
+      "output": [
+        64,
+        25,
+        5
+      ],
+      "groups": 64,
+      "channels": 64,
+      "kernel": [
+        3,
+        3
+      ],
+      "stride": [
+        1,
+        1
+      ],
+      "padding": [
+        1,
+        1
+      ]
+    },
+    {
+      "index": 3,
+      "input": [
+        64,
+        25,
+        5
+      ],
+      "depthwise": [
+        64,
+        25,
+        5
+      ],
+      "output": [
+        64,
+        25,
+        5
+      ],
+      "groups": 64,
+      "channels": 64,
+      "kernel": [
+        3,
+        3
+      ],
+      "stride": [
+        1,
+        1
+      ],
+      "padding": [
+        1,
+        1
+      ]
+    },
+    {
+      "index": 4,
+      "input": [
+        64,
+        25,
+        5
+      ],
+      "depthwise": [
+        64,
+        25,
+        5
+      ],
+      "output": [
+        64,
+        25,
+        5
+      ],
+      "groups": 64,
+      "channels": 64,
+      "kernel": [
+        3,
+        3
+      ],
+      "stride": [
+        1,
+        1
+      ],
+      "padding": [
+        1,
+        1
+      ]
+    }
+  ],
+  "scope": "architecture visualization only; exact tensor labels; cuboids are illustrative"
+}

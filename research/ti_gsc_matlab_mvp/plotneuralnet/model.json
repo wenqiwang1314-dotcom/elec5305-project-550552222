@@ -1,0 +1,15 @@
+{
+  "name": "TI DSCNN_NPU",
+  "input": {"channels": 1, "time": 49, "features": 10},
+  "stem": {"channels": 64, "kernel": [10, 4], "stride": [2, 2], "padding": [5, 1]},
+  "ds_blocks": [
+    {"channels": 64, "kernel": [3, 3], "stride": [1, 1], "padding": [1, 1]},
+    {"channels": 64, "kernel": [3, 3], "stride": [1, 1], "padding": [1, 1]},
+    {"channels": 64, "kernel": [3, 3], "stride": [1, 1], "padding": [1, 1]},
+    {"channels": 64, "kernel": [3, 3], "stride": [1, 1], "padding": [1, 1]}
+  ],
+  "dropout": [0.2, 0.4],
+  "classes": 12,
+  "source_url": "https://github.com/TexasInstruments/tinyml-modelzoo/blob/b5fcd63e5d28fd7c9f1a7ea0f85b5778adcd9527/tinyml_modelzoo/models/audio.py#L8-L86",
+  "source_commit": "b5fcd63e5d28fd7c9f1a7ea0f85b5778adcd9527"
+}

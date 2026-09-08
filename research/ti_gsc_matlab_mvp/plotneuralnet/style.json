@@ -1,0 +1,24 @@
+{
+  "font_size_pt": 11,
+  "input_height": 27,
+  "input_depth": 12,
+  "feature_height": 19,
+  "feature_depth": 9,
+  "stem_width": 3.4,
+  "depthwise_width": 1.7,
+  "pointwise_width": 3.2,
+  "block_gap_cm": 1.05,
+  "within_block_gap_cm": 0.18,
+  "opacity": 0.83,
+  "colors": {
+    "InputColor": "C6DDED",
+    "StemColor": "F5C982",
+    "DWColor": "EE9955",
+    "PWColor": "68ACB4",
+    "BNColor": "B9CA83",
+    "DropColor": "B6AACB",
+    "PoolColor": "E4C365",
+    "FCColor": "9A8EB5",
+    "EdgeColor": "385C66"
+  }
+}

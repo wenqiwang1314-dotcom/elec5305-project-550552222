@@ -1,0 +1,3 @@
+# Required only for SVG conversion, PDF validation, and optional PNG fallback.
+# Model configuration and PlotNeuralNet LaTeX generation use the stdlib.
+PyMuPDF==1.26.7

@@ -1,0 +1,27 @@
+{
+  "date": "2026-09-08",
+  "matlab": "R2026a Update 4",
+  "relocated_full_matlab_validation": "PASS",
+  "frontend_probes": 53,
+  "maximum_absolute_error": 0,
+  "legacy_variables_compared": 11,
+  "real_audio_csv_matches_original": true,
+  "plotneuralnet_relocated_compile": "PASS",
+  "model_shape_tests": [
+    "baseline",
+    "modified width/depth/stride/classes",
+    "invalid spatial shape rejected"
+  ],
+  "vendored_core_matches_original_bytes": true,
+  "published_pdfs": {
+    "count": 3,
+    "pages_each": 1,
+    "fonts_embedded": true,
+    "raster_images": 0,
+    "host_paths_in_text_or_metadata": false
+  },
+  "frozen_mat_host_path_scan": "PASS",
+  "ti_sdk_numerical_parity": "UNVERIFIED",
+  "trained_dscnn_evaluation": "NOT_PERFORMED",
+  "hardware_measurement": "NOT_PERFORMED"
+}

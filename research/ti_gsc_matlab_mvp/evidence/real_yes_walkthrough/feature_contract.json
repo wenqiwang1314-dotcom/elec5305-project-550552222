@@ -1,0 +1,31 @@
+{
+  "sample_rate_hz": 16000,
+  "frame_samples": 480,
+  "hop_samples": 320,
+  "nfft": 512,
+  "mel_filters": 40,
+  "mel_min_hz": 20,
+  "mel_max_hz": 8000,
+  "log_base": "e",
+  "energy_floor": 1e-10,
+  "window": "symmetric Hamming",
+  "dct": "orthonormal type II, c0 through c9",
+  "mfcc_csv_shape": [
+    49,
+    10
+  ],
+  "semantic_nchw_shape": [
+    1,
+    1,
+    49,
+    10
+  ],
+  "binary_dtype": "float32 little endian",
+  "binary_order": "frame-major, coefficient-fastest",
+  "binary_values": 490,
+  "binary_bytes": 1960,
+  "binary_roundtrip_pass": true,
+  "npu_quantization": "not performed",
+  "compatibility_scope": "Original MATLAB MVP; TI SDK numerical parity is unverified",
+  "audio_source": "examples/yes.wav"
+}

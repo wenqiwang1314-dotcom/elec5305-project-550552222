@@ -1,5 +1,11 @@
 # Efficient Audio Preprocessing and TI NPU Model Research Plan
 
+> **Active focus (8 September 2026):** pre-model digital signal processing and
+> DSP/DSCNN co-design. Start with [RESEARCH_FOCUS.md](RESEARCH_FOCUS.md) for the
+> ordered experiment programme and evidence boundaries, and the
+> [reproducible workbench](research/ti_gsc_matlab_mvp/README.md) for the two
+> primary paper figures, modular MATLAB implementation and PlotNeuralNet source.
+
 **Student:** Lucas(Wenqi) Wang (SID 550552222)
 **Task:** 12-class Speech Commands classification
 **Target anchor:** Texas Instruments `DSCNN_NPU` on MSPM0G5187

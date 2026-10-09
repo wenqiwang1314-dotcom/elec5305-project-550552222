@@ -1,6 +1,6 @@
 # Primary focus: pre-model DSP and joint optimization with DSCNN
 
-Updated 8 September 2026. This is the active research scope and entry point.
+Updated 9 October 2026. This is the active research scope and entry point.
 The [detailed protocol](PREPROCESSING_NPU_RESEARCH_PLAN.md) remains the design
 reference; previous 5-NN studies are preliminary diagnostics.
 
@@ -66,12 +66,12 @@ the deployed quantization/layout contract require independent golden vectors.
 The model source is pinned in the [configuration](research/ti_gsc_matlab_mvp/plotneuralnet/model.json).
 There is no residual connection, concatenation or softmax in this backbone.
 
-## Ordered experiment programme — planned, not completed
+## Ordered experiment programme and current gates
 
 | Phase | Controlled question | Output / gate |
 |---|---|---|
 | 0. Reproducibility | Does modularization preserve the original arithmetic? | Frozen original, 53 probes, stage plots and checksums; completed for the MATLAB reference |
-| 1. Equivalent implementation | Can cached windows/filterbanks/DCT and fewer allocations reduce cost? | Fixed features; zero error for exact changes, declared tolerance for precision changes; setup/steady-state timing |
+| 1. Equivalent implementation | Can cached windows/filterbanks/DCT and fewer allocations reduce cost? | Cached constants completed on PC: 960 exact matches, 0.658 to 0.504 ms/clip; sparse storage and allocation work remain |
 | 2. Fixed-shape DSP | Which conditioning, normalization or compression improves the same 49x10 interface? | One factor at a time, fixed 64-channel backbone, independently retrained weights, matched training budget |
 | 3. Co-design | Do different T/F dimensions allow a smaller or better model? | Paired front ends and width/depth/stem variants, valid shapes, compiler-supported operators, accuracy/cost Pareto table |
 | 4. Quantization | Which scale/layout retains accuracy and compiler coverage? | Training-only calibration subset, float/int8 golden tensors, saturation statistics, accuracy and compile report |
@@ -104,8 +104,15 @@ calibration statistics use training data only.
 
 Available: real-audio stage plots and MFCC arrays; legacy parity over 53 probes
 and 11 workflow variables; parameterized PlotNeuralNet diagrams and shape tests.
+The [Feedback Two experiment](docs/feedback-two.html) adds 960 real-audio cached
+MFCC comparisons (maximum error zero), five edge probes, and nine alternating
+timing rounds. Ratio of median batch-average times is 1.31x on the recorded PC.
+The 89,280-byte double-precision constant payload is not total working RAM.
 Synthetic centroid accuracy is a regression diagnostic. The earlier
 [real-data 5-NN ablation](MFCC_OPTIMIZATION_ANALYSIS.md) is a separate diagnostic.
+Its repeated development comparisons exposed the small test subset; those
+results cannot establish an unbiased final ranking. Use the official validation
+partition for future model selection and preserve the final test partition.
 
 DSCNN training, TI SDK numerical parity, quantized inference, compiler acceptance
 and hardware timing/energy remain open work. This publication establishes none

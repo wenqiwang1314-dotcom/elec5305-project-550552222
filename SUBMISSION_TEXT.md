@@ -1,5 +1,9 @@
 # Canvas submission draft
 
+Historical Feedback One text. For **Feedback Two (9 October 2026)**, use
+[SUBMISSION_FEEDBACK_TWO.txt](SUBMISSION_FEEDBACK_TWO.txt) and the
+[new progress PDF](output/pdf/ELEC5305_Feedback_Two_Lucas_Wenqi_Wang_550552222.pdf).
+
 This project investigates efficient raw-audio preprocessing and NPU-compatible
 keyword spotting for ten spoken commands, unknown speech, and silence using
 MATLAB and Speech Commands v0.02. The GitHub Project Site documents the MFCC,

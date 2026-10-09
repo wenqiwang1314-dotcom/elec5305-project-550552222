@@ -36,6 +36,21 @@ script and independent MFCC implementation are retained. Published
 and exact agreement for 11 original workflow variables. This establishes MATLAB
 refactor parity; TI SDK numerical parity is unverified.
 
+## Feedback Two: equivalent cached frontend
+
+Run `benchmark_cached_frontend` from this directory or add it to the MATLAB
+path. The script uses the public ZIP archives, verifies every input hash and
+zero-pads short WAVs before comparing the reference and cached feature maps.
+Outputs are in `results/feedback_two/` at the repository root.
+
+`tigsc.prepare_frontend` creates a configuration-specific plan containing the
+window, Mel weights and DCT basis; `tigsc.frontend_cached` reuses it. Runtime
+comparisons use the same feature-only kernel, with or without rebuilding the
+plan, excluding reading, hashing, padding, plots and classification. Nine
+rounds alternate ordering, using 120 fixed clips per round. The saved timing
+table shows variability; the payload count excludes scratch arrays, MATLAB
+object overhead and FFT working memory. It is not MCU RAM or latency.
+
 ## PlotNeuralNet: editable SCI-style architecture
 
 See [`plotneuralnet/README.md`](plotneuralnet/README.md) for setup and rebuilding.

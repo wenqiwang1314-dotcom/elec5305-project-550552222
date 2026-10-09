@@ -21,12 +21,12 @@
     <h2>What is included</h2>
     <div class="grid">
       <div class="card"><div class="metric">12</div>class-level ZIP archives</div>
-      <div class="card"><div class="metric">960</div>one-second WAV examples</div>
+      <div class="card"><div class="metric">960</div>WAV examples, up to one second</div>
       <div class="card"><div class="metric">60 + 20</div>train and test per class</div>
       <div class="card"><div class="metric">21.51 MB</div>total compressed size</div>
     </div>
     <p>Ten archives contain target commands. The <code>_unknown_</code> archive samples other Speech Commands labels, while <code>_silence_</code> contains deterministic one-second windows derived from the upstream background-noise recordings at 10% amplitude. The train/test assignment is fixed by the project manifest and has zero audited speaker overlap.</p>
-    <p class="notice"><strong>Integrity:</strong> all 12 ZIP CRCs, all 960 manifest hashes, all audio format checks, and all 880 source-copy byte comparisons pass. Each WAV is mono, 16 kHz, and 16,000 samples.</p>
+    <p class="notice"><strong>Integrity:</strong> all 12 ZIP CRCs, all 960 manifest hashes, all audio format checks, and all 880 source-copy byte comparisons pass. Every WAV is mono at 16 kHz; 876 files contain 16,000 samples and 84 are shorter (minimum 7,509 samples). The fixed-clip adapter right-pads short recordings with zeros before producing the 49 × 10 input. Source WAVs remain byte-for-byte copies.</p>
   </section>
 
   <section>

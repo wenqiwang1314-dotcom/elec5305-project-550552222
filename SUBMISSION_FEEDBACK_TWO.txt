@@ -1,0 +1,8 @@
+Lucas(Wenqi) Wang | SID 550552222
+Project Feedback Two
+
+This project investigates efficient audio preprocessing and DSCNN co-design for 12-class keyword spotting. Completed work includes a modular MATLAB MFCC pipeline, real-audio stage visualizations, licensed reproducible data and an earlier 5-NN feature study. A new cached frontend reproduced all 960 reference MFCC maps exactly and reduced median PC processing time from 0.658 to 0.504 ms per clip (1.31x). The earlier CMN diagnostic reached 47.08% clean accuracy; noise robustness and unknown rejection remain priorities. The project site documents code, measurements, limitations and next steps. DSCNN training and TI hardware validation remain future work. OpenAI Codex assisted with implementation, documentation and experiment execution, as disclosed in the attached progress report.
+
+GitHub Project Site: https://wenqiwang1314-dotcom.github.io/elec5305-project-550552222/
+Progress: https://wenqiwang1314-dotcom.github.io/elec5305-project-550552222/feedback-two.html
+Repository: https://github.com/wenqiwang1314-dotcom/elec5305-project-550552222

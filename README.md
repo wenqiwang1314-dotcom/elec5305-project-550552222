@@ -25,9 +25,10 @@ run_ti_gsc_single_audio
 ```
 
 See the [workbench instructions](research/ti_gsc_matlab_mvp/README.md) for
-numerical validation and rebuilding PlotNeuralNet figures. The next experiment
-is an equivalent DSP implementation comparison, followed by independently
-retrained, matched-budget DSP/model pairs.
+numerical validation and rebuilding PlotNeuralNet figures. The equivalent cached
+DSP experiment is now complete on PC: 960/960 exact matches and 1.31x speedup
+(ratio of median batch-average times). Next are compact constant storage and
+independently retrained, matched-budget DSP/model pairs.
 
 ## Project context
 
@@ -40,11 +41,26 @@ is Texas Instruments' Google Speech Commands DSCNN example for MSPM0G5187.
 
 **Project site:** https://wenqiwang1314-dotcom.github.io/elec5305-project-550552222/
 
+**Project Feedback Two (9 October):** [progress and new measured DSP results](https://wenqiwang1314-dotcom.github.io/elec5305-project-550552222/feedback-two.html).
+The progress page links the submission PDF, exact-parity audit, timing rounds,
+limitations, and runnable code. Reproduce the new experiment from the repo root:
+
+```matlab
+addpath(fullfile('research','ti_gsc_matlab_mvp'))
+benchmark_cached_frontend
+```
+
+This benchmark uses the bundled 12 ZIPs directly; no private dataset path or
+additional toolbox is required. It verifies ZIP/WAV hashes, adapts 84 short
+clips with explicit zero-padding, compares all 960 MFCC maps, tests edge inputs,
+and alternates cached/uncached timing order over nine warmed-up rounds.
+
 **Final proposal PDF:** [ELEC5305 Project Proposal](output/pdf/ELEC5305_Project_Proposal_Lucas_Wenqi_Wang_550552222.pdf)
 
 ## Earlier diagnostics and project status
 
-- Real dataset found and audited: 105,829 one-second 16 kHz WAV files.
+- Real dataset found and audited: 105,829 16 kHz WAV files (spoken-word clips
+  are up to approximately one second; background recordings are longer).
 - Official validation/test lists are respected.
 - MATLAB smoke test: hand-written MFCC plus 5-nearest-neighbour baseline.
 - Preliminary result: 39.17% accuracy/macro recall on 240 held-out samples,

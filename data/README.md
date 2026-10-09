@@ -31,3 +31,8 @@ Training excludes every path named in the official `validation_list.txt` and
 
 Speech Commands v0.02 is licensed CC BY 4.0. The license copy and per-archive
 attribution notice identify the original TensorFlow download and Warden paper.
+
+Duration audit (9 October 2026): 876 of the 960 WAVs contain 16,000 samples;
+84 contain fewer (minimum 7,509). The WAVs preserve source duration. The MATLAB
+fixed-clip adapter zero-pads short audio to 16,000 samples before either front
+end. File lengths and normalized model-input lengths must not be conflated.

@@ -24,7 +24,7 @@ TEXT = {".md", ".txt", ".csv", ".json", ".html", ".py", ".ps1", ".m", ".sty", ".
 
 def release_files():
     files = []
-    for base in (WORK, ROOT / "docs/assets/research"):
+    for base in (WORK, ROOT / "docs/assets/research", ROOT / "results/feedback_two"):
         for path in base.rglob("*"):
             relative = path.relative_to(base)
             if any(part in {"output", ".venv", "__pycache__", ".git", "tectonic"}
@@ -34,8 +34,12 @@ def release_files():
                 assert path.suffix.lower() not in {".exe", ".zip", ".log", ".pyc"}, path
                 files.append(path)
     files.extend(ROOT / name for name in (
-        "README.md", "RESEARCH_FOCUS.md", "PREPROCESSING_NPU_RESEARCH_PLAN.md",
-        "docs/index.html", "docs/dsp-model-codesign.html",
+        ".gitattributes", "README.md", "RESEARCH_FOCUS.md", "PREPROCESSING_NPU_RESEARCH_PLAN.md",
+        "docs/index.html", "docs/dsp-model-codesign.html", "docs/feedback-two.html",
+        "docs/assets/feedback_two_timing.png", "docs/dataset.html", "data/README.md",
+        "docs/downloads/ELEC5305_Feedback_Two_Lucas_Wenqi_Wang_550552222.pdf",
+        "SUBMISSION_FEEDBACK_TWO.txt", "SUBMISSION_TEXT.md",
+        "tools/build_feedback_two.py", "tools/verify_feedback_two.py",
         "tools/import_dsp_research.py", "tools/verify_dsp_release.py"))
     return sorted(files)
 
@@ -53,7 +57,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--write-manifest", action="store_true")
     args = parser.parse_args()
-    for name in ("index.html", "dsp-model-codesign.html"):
+    for name in ("index.html", "dsp-model-codesign.html", "feedback-two.html", "dataset.html"):
         page = ROOT / "docs" / name
         links = Links()
         links.feed(page.read_text(encoding="utf-8"))
@@ -100,7 +104,7 @@ def main():
     manifest = "".join(f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.relative_to(ROOT).as_posix()}\n"
                        for path in files)
     if args.write_manifest:
-        MANIFEST.write_text(manifest, encoding="utf-8")
+        MANIFEST.write_text(manifest, encoding="utf-8", newline="\n")
     else:
         assert MANIFEST.read_text(encoding="utf-8") == manifest, "Release manifest differs."
     print(f"DSP_RELEASE_PASS=1\nFILES_HASHED={len(files)}\nLOCAL_LINKS_PASS=1\nAUDIO_HASH_PASS=1\nFLOAT32_ROUNDTRIP_PASS=1\nPUBLIC_PATH_SCAN_PASS=1")

@@ -1,6 +1,6 @@
 # Efficient Audio Preprocessing and TI NPU Model Research Plan
 
-> **Active focus (8 September 2026):** pre-model digital signal processing and
+> **Active focus (9 October 2026):** pre-model digital signal processing and
 > DSP/DSCNN co-design. Start with [RESEARCH_FOCUS.md](RESEARCH_FOCUS.md) for the
 > ordered experiment programme and evidence boundaries, and the
 > [reproducible workbench](research/ti_gsc_matlab_mvp/README.md) for the two
@@ -129,6 +129,15 @@ hardware are never compared as if they share one protocol.
 
 ## 6. Current evidence and immediate decision
 
+The [Feedback Two progress report](docs/feedback-two.html) now measures an
+equivalent cached frontend on all 960 published recordings: all feature maps
+match exactly. Nine warmed-up, alternating-order rounds give median batch-average
+times of 0.658 ms uncached and 0.504 ms cached (1.31x). This measures PC MATLAB
+feature-only processing, not inference or hardware energy. Constants use 89,280
+bytes in double precision before scratch storage. Sparse/compact constants are
+the next implementation question. Both paths right-pad the 84 short source clips
+to 16,000 samples outside the timing interval; raw archives remain unchanged.
+
 The TI-reference MFCC plus 5-NN gives 39.17% clean accuracy on the fixed subset.
 Adding utterance cepstral mean normalization reaches 47.08% with the same 490
 feature elements, while pre-emphasis reaches 41.67%. Denser feature maps do not
@@ -139,6 +148,14 @@ The immediate DSCNN candidates are therefore `P0` TI MFCC, `P1` TI MFCC plus
 CMN, `P2` TI MFCC plus pre-emphasis/CMN, and `P3` PCEN or 20-bin MFSC. Every
 candidate must be retrained with noise augmentation; the current 5-NN ordering
 is a screening result, not a final model ranking.
+
+The 5-NN study used 90 summary features (mean, standard deviation and seven
+temporal bins), not a DSCNN operating on all 490 map values. Its small test
+subset was examined during exploratory development. Future neural-network
+selection must therefore use the official validation partition; do not present
+these historical comparisons as an unbiased final ranking. For the remaining
+coursework window, prioritize P0 versus P1 with a matched small DSCNN before
+expanding the full design matrix.
 
 ## 7. Completion gates
 
